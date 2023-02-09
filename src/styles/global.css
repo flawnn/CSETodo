@@ -38,13 +38,19 @@ body {
 }
 
 body {
-    display: grid;
-    place-content: center;
     font-family: var(--sans-serif);
     font-weight: 300;
     line-height: 1.4;
     background-color: var(--color-bg);
     color: var(--color-text);
+}
+
+.todos-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 label,
