@@ -49,9 +49,13 @@ body {
     background-color: var(--color-bg);
     background-size: cover;
     background-repeat: no-repeat;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
     transition: opacity 0.75s;
-    transition: background-color 0.5s;
-    transition: background-image 0.5s;
+    transition: background-color 1s;
+    transition: background-image 1s;
+    background-color: #0005;
+    background-blend-mode: darken;
 }
 
 .todos-container {
