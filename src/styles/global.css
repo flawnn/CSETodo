@@ -1,4 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 *,
 *::before,
 *::after {
@@ -41,8 +45,13 @@ body {
     font-family: var(--sans-serif);
     font-weight: 300;
     line-height: 1.4;
+    color: var(--color-text);   
     background-color: var(--color-bg);
-    color: var(--color-text);
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: opacity 0.75s;
+    transition: background-color 0.5s;
+    transition: background-image 0.5s;
 }
 
 .todos-container {
