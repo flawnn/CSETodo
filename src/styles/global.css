@@ -1,7 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 *,
 *::before,
@@ -45,16 +42,16 @@ body {
     font-family: var(--sans-serif);
     font-weight: 300;
     line-height: 1.4;
-    color: var(--color-text);   
+    color: var(--color-text);
     background-color: var(--color-bg);
     background-size: cover;
     background-repeat: no-repeat;
-    -webkit-backdrop-filter: blur(5px);
-    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     transition: opacity 0.75s;
     transition: background-color 1s;
     transition: background-image 1s;
-    background-color: #0005;
+    background-color: rgba(0, 0, 0, 0.547);
     background-blend-mode: darken;
 }
 

@@ -143,6 +143,7 @@
     background-repeat: no-repeat;
     background-position: 84% 50%;
 }
+
 .toggle:checked+label {
     background-image: url("/todos/checked.svg");
 }
@@ -196,4 +197,4 @@ form {
 
 .avatar {
     z-index: 10;
-} 
+}
