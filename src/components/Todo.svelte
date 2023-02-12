@@ -2,7 +2,8 @@
 	import '$root/styles/todos.css';
 	import type { ITodo } from '$root/types/ITodo';
 	import { onMount } from 'svelte';
-	import { fade } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
+	import { fade, slide } from 'svelte/transition';
 	import AddTodo from './AddTodo.svelte';
 
 	let username = 'flawn';
@@ -60,7 +61,7 @@
 				<AddTodo />
 				<ul class="todo-list">
 					{#each todos as todo (todo.id)}
-						<li class="todo">
+						<li class="todo" transition:slide={{ delay: 250, duration: 300, easing: quintOut }}>
 							<div class="todo-item">
 								<div>
 									<input checked={todo.completed} id="todo" class="toggle" type="checkbox" />
