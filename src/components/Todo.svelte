@@ -1,13 +1,12 @@
 <script lang="ts">
 	import '$root/styles/todos.css';
 	import type { ITodo } from '$root/types/ITodo';
-	import { onMount } from 'svelte';
 	import { quintOut } from 'svelte/easing';
 	import { fade, slide } from 'svelte/transition';
 	import AddTodo from './AddTodo.svelte';
 
 	let username = 'flawn';
-	let isImageLoaded = false;
+	export let imagesLoaded: boolean;
 
 	let todos: ITodo[] = [
 		{ id: '1', text: 'Todo 1', completed: true },
@@ -15,28 +14,15 @@
 		{ id: '3', text: 'Todo 3', completed: false },
 		{ id: '4', text: 'Todo 4', completed: false }
 	];
-
-	// Load background iamge
-	onMount(async () => {
-		// Fetch the image from the server
-		fetch('https://source.unsplash.com/640x360/?mountains')
-			.then((response) => response.blob())
-			.then((blob) => {
-				// Convert the blob to a URL that can be used as the image source
-				const imageUrl = URL.createObjectURL(blob);
-
-				// Save the image URL in local storage
-				localStorage.setItem('backgroundImage', imageUrl);
-
-				// Set the background image of the page
-				document.body.style.backgroundImage = `url(${imageUrl})`;
-
-				isImageLoaded = !isImageLoaded;
-			});
-	});
 </script>
 
-{#if !isImageLoaded}
+<!-- For preloading avatar -->
+<link
+	rel="preload"
+	href="https://source.boringavatars.com/marble/120/${username}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51"
+	as="image"
+/>
+{#if !imagesLoaded}
 	<div class="spinner">
 		<div class="lds-ring">
 			<div />
@@ -46,11 +32,12 @@
 		</div>
 	</div>
 {:else}
-	<main in:fade={{ duration: 1000 }} style="--isLoaded: {isImageLoaded ? 1 : 0}">
+	<main in:fade={{ duration: 1000 }} style="--isLoaded: {imagesLoaded ? 1 : 0}">
 		<div class="m-2 h-14 w-14 drop-shadow-xl rounded-full fixed top-0 right-0 avatar">
 			<img
+				id="avatar"
+				src="https://source.boringavatars.com/marble/120/${username}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51"
 				class="rounded-full"
-				src="https://source.boringavatars.com/marble/120/{username}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51"
 				alt="avatar"
 			/>
 			<div id="login-indicator" class="bg-red-500 absolute top-0 right-0 w-4 h-4 rounded-full" />
