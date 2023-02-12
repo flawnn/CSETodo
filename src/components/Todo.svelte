@@ -1,12 +1,19 @@
-<script type="ts">
+<script lang="ts">
 	import '$root/styles/todos.css';
-
-	let username = 'flawn';
-
+	import type { ITodo } from '$root/types/ITodo';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import AddTodo from './AddTodo.svelte';
 
+	let username = 'flawn';
 	let isImageLoaded = false;
+
+	let todos: ITodo[] = [
+		{ id: '1', text: 'Todo 1', completed: true },
+		{ id: '2', text: 'Todo 2', completed: false },
+		{ id: '3', text: 'Todo 3', completed: false },
+		{ id: '4', text: 'Todo 4', completed: false }
+	];
 
 	// Load background iamge
 	onMount(async () => {
@@ -50,24 +57,20 @@
 		<div class="todos-container">
 			<h1 class="title">to-dos 🚧</h1>
 			<div class="todos">
-				<form>
-					<input type="checkbox" id="toggle-all" class="toggle-all" />
-					<label aria-label="Mark all as complete" for="toggle-all"> Mark all as complete </label>
-
-					<input id="new-todo" class="new-todo" placeholder="What's on your mind?" type="text" />
-				</form>
-
+				<AddTodo />
 				<ul class="todo-list">
-					<li class="todo">
-						<div class="todo-item">
-							<div>
-								<input id="todo" class="toggle" type="checkbox" />
-								<label aria-label="Check todo" class="todo-check" for="todo" />
+					{#each todos as todo (todo.id)}
+						<li class="todo">
+							<div class="todo-item">
+								<div>
+									<input checked={todo.completed} id="todo" class="toggle" type="checkbox" />
+									<label aria-label="Check todo" class="todo-check" for="todo" />
+								</div>
+								<span class="todo-text">{todo.text}</span>
+								<button aria-label="Remove todo" class="remove" />
 							</div>
-							<span class="todo-text">Test Todo</span>
-							<button aria-label="Remove todo" class="remove" />
-						</div>
-					</li>
+						</li>
+					{/each}
 				</ul>
 
 				<div class="actions">
@@ -92,6 +95,7 @@
 		transform: translate(-50%, -50%);
 	}
 
+	/* Courtesy of https://loading.io/css/ */
 	.lds-ring {
 		display: inline-block;
 		position: relative;
