@@ -1,11 +1,11 @@
 <script lang="ts">
 	import '$root/styles/todos.css';
-	import type { ITodo } from '$root/types/ITodo';
+	import type { Todo } from '$root/types/Todo';
 	import { quintOut } from 'svelte/easing';
 	import { fade, slide } from 'svelte/transition';
 	import AddTodo from './AddTodo.svelte';
 
-	let todos: ITodo[] = [
+	let todos: Todo[] = [
 		{ id: '1', text: 'Todo 1', completed: true },
 		{ id: '2', text: 'Todo 2', completed: false },
 		{ id: '3', text: 'Todo 3', completed: false },
