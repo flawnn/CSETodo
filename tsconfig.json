@@ -10,7 +10,9 @@
 		"sourceMap": true,
 		"baseUrl": ".",
 		"paths": {
-      		"$root/*": ["./src/*"]
+      		"$root/*": ["./src/*"],
+			"$lib":["./src/lib"],
+ 			"$lib/*":["./src/lib/*"]
     	},
 		"strict": true
 	},
