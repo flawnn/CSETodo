@@ -1,14 +1,15 @@
-/** @type {import('./$types').LayoutServerLoad} */
-export interface ApplicationData {
-	user: UserData;
-}
+import { v4 as uuidv4 } from 'uuid';
+import type { LayoutServerLoad } from "./$types";
 
-export interface UserData {
-	username: string;
-}
+export const load = (async () => {
+	let uuid = window.localStorage.getItem("device_id");
 
-export async function load(): Promise<ApplicationData> {
+	if(uuid == null){
+		uuid = uuidv4();
+		window.localStorage.setItem("device_id", uuid);
+	} 
+	
 	return {
-		user: {username: "flawn"}
+		device_id: uuid,
 	};
-}
+}) satisfies LayoutServerLoad;
