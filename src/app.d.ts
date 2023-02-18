@@ -6,7 +6,11 @@ declare global {
 		interface Locals {
 			user: User
 		}
-		// interface PageData {}
+		 interface PageData {
+			onboardingNeeded: boolean,
+			user: User,
+			device_id: string
+		}
 		// interface Platform {}
 	}
 }

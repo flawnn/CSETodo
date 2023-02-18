@@ -3,6 +3,7 @@
 	import type { Todo } from '$root/types/Todo';
 	import { quintOut } from 'svelte/easing';
 	import { fade, slide } from 'svelte/transition';
+	import type { PageData } from '../routes/$types';
 	import AddTodo from './AddTodo.svelte';
 
 	let todos: Todo[] = [
@@ -12,15 +13,15 @@
 		{ id: '4', text: 'Todo 4', completed: false }
 	];
 
-	export let data: {};
+	export let data: PageData;
+
 </script>
 
 <main in:fade={{ duration: 1000 }}>
 	<div class="m-2 h-14 w-14 drop-shadow-xl rounded-full fixed top-0 right-0 avatar">
 		<img
 			id="avatar"
-			src="https://source.boringavatars.com/marble/120/${data.user
-				.username}?colors=264653,2a9d8f,e9c46a,f4a261,e76f51"
+			src="https://source.boringavatars.com/marble/120/${data.device_id}"
 			class="rounded-full"
 			alt="avatar"
 		/>

@@ -2,6 +2,9 @@
 	import Todo from '$root/components/Todo.svelte';
 	import '$root/styles/global.css';
 	import { onMount } from 'svelte';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
 
 	let imagesLoaded = false;
 
@@ -17,8 +20,12 @@
 			});
 	});
 
-	/** @type {import('./$types').PageData} */
-	export let data: {};
+	function handleLogin(e: Event) {
+		const formData = new FormData(e.target as HTMLFormElement);
+
+		// TODO: Upload as file
+		let private_key = formData.get('pkey') as FormDataEntryValue;
+	}
 </script>
 
 <section>

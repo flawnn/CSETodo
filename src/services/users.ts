@@ -30,6 +30,7 @@ const createUser = async (session_id: string, dek: string, public_key: string) =
 
         const jwtData = {
             _id: newUser.id,
+            session: session_id
         }
 
         const token = jwt.sign(jwtData, JWT_SECRET)
@@ -41,6 +42,40 @@ const createUser = async (session_id: string, dek: string, public_key: string) =
         }
     }
 }
+const getUserByCookies = async (cookies: Record<string, string>): Promise<{ _id: string} | null> => {
+    if (cookies.AuthorizationToken) {
+    const token = cookies.AuthorizationToken.split(" ")[1];
 
-export { createUser };
+    try {
+      const jwtUser = jwt.verify(token, import.meta.env.VITE_JWT_SECRET);
+      if (typeof jwtUser === "string") {
+        throw new Error("Something went wrong");
+      }
+
+    debugger;
+
+    const user = await db.users.findUnique({
+    where: {
+        id: jwtUser.id,
+    },
+    });
+
+    if (!user) {
+    throw new Error("User not found");
+    }
+
+    const sessionUser = {
+        _id: user.id,
+        session: jwtUser.session
+    }
+
+    return sessionUser;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  return null;
+}
+export { createUser, getUserByCookies };
 
