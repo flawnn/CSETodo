@@ -1,6 +1,8 @@
 import { JWT_SECRET } from '$env/static/private';
 import { db } from '$root/services/db';
+import type { users } from '@prisma/client';
 import jwt from 'jsonwebtoken';
+import type { JwtData } from './../types/JwtData';
 
 const createUser = async (session_id: string, dek: string, public_key: string) => {
     let existingUser = await db.users.findFirst({
@@ -28,8 +30,8 @@ const createUser = async (session_id: string, dek: string, public_key: string) =
             }
         }
 
-        const jwtData = {
-            _id: newUser.id,
+        const jwtData: JwtData = {
+            _id: newUser.id!,
             session: session_id
         }
 
@@ -42,17 +44,38 @@ const createUser = async (session_id: string, dek: string, public_key: string) =
         }
     }
 }
-const getUserByCookies = async (cookies: Record<string, string>): Promise<{ _id: string} | null> => {
+
+const findUser = async (id: string | undefined, public_key: string | undefined): Promise<users> => {
+    let key = id != null ? "id" : "public_key"
+    let query: {[k: string]: any} = {}
+    if(id != null){
+        query.id = id
+    } else if(public_key != null){
+        query.public_key = public_key
+    } else {
+        throw new Error("Missing params")
+    }
+
+    const user = await db.users.findUnique({
+        where: query
+    });
+
+    if (!user) {
+       throw new Error("User not found");
+    }
+
+    return user;
+}
+
+const getUserByCookies = async (cookies: Record<string, string>): Promise<Object | null> => {
     if (cookies.AuthorizationToken) {
     const token = cookies.AuthorizationToken.split(" ")[1];
 
     try {
-      const jwtUser = jwt.verify(token, import.meta.env.VITE_JWT_SECRET);
+      const jwtUser = jwt.verify(token, JWT_SECRET);
       if (typeof jwtUser === "string") {
         throw new Error("Something went wrong");
       }
-
-    debugger;
 
     const user = await db.users.findUnique({
     where: {
@@ -66,7 +89,8 @@ const getUserByCookies = async (cookies: Record<string, string>): Promise<{ _id:
 
     const sessionUser = {
         _id: user.id,
-        session: jwtUser.session
+        session: jwtUser.session,
+        user: null // Seperate user object to populate on every site load
     }
 
     return sessionUser;
@@ -77,5 +101,5 @@ const getUserByCookies = async (cookies: Record<string, string>): Promise<{ _id:
 
   return null;
 }
-export { createUser, getUserByCookies };
+export { createUser, getUserByCookies, findUser };
 
