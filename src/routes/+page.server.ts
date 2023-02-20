@@ -1,20 +1,5 @@
-import { db } from '$root/services/db';
 import { createUser } from '$root/services/users';
-import type { Actions, PageServerLoad } from './../../.svelte-kit/types/src/routes/$types.d';
-
-export const load = (async ({ cookies, locals, request }) => {
-  const user = locals.user;
- 
-  if (user) {
-	// Load Todos from Server & Decrypt
-  } else {
-	return {
-		onboardingNeeded: true,
-		user: {}
-	}
-  }
-}) satisfies PageServerLoad;
-
+import type { Actions } from './../../.svelte-kit/types/src/routes/$types.d';
 
 export const actions = {
   register: async ({ cookies, request }) => {
