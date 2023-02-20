@@ -1,6 +1,9 @@
 <script lang="ts">
 	import Todo from '$root/components/Todo.svelte';
+	import { getPublicKeyFromPrivateKey } from '$root/lib/util';
 	import '$root/styles/global.css';
+	import { Base64 } from 'js-base64';
+	import * as forge from 'node-forge';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 
@@ -20,11 +23,46 @@
 			});
 	});
 
-	function handleLogin(e: Event) {
+	async function handleLogin(e: Event) {
 		const formData = new FormData(e.target as HTMLFormElement);
 
-		// TODO: Upload as file
-		let private_key = formData.get('pkey') as FormDataEntryValue;
+		let private_key = forge.pki.privateKeyFromPem(
+			(formData.get('pkey') as FormDataEntryValue).toString()
+		);
+		let public_key = getPublicKeyFromPrivateKey(private_key);
+
+		let payload = {
+			device_id: data.device_id,
+			public_key: Base64.encode(public_key)
+		};
+
+		var md = forge.md.sha1.create();
+		md.update(JSON.stringify(payload), 'utf8');
+		let signature = private_key.sign(md);
+
+		let body = {
+			payload: payload,
+			signature: signature
+		};
+
+		let res = await (
+			await fetch('/api/auth/login', {
+				body: JSON.stringify(body),
+				method: 'POST'
+			})
+		).json();
+
+		if (res.error ?? false) {
+			// Show error message in UI, something went wrong; Show Toast or smth
+		} else {
+			// Show sucess toast, move on to DEK decryption
+			let user = res.user;
+
+			let decrypted_dek = private_key.decrypt(user.dek);
+			localStorage.setItem('dek', decrypted_dek);
+
+			// Populate user object
+		}
 	}
 </script>
 
