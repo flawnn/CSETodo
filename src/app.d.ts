@@ -1,10 +1,11 @@
+import { JwtData } from './types/JwtData';
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user: User
+			user: JwtData
 		}
 		 interface PageData {
 			onboardingNeeded: boolean,

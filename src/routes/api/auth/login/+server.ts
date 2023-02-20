@@ -28,7 +28,7 @@ export const POST = (async ({ params, url, request, cookies }) => {
             }
 
             let token = jwt.sign({
-                _id: user.id,
+                id: user.id,
                 session: body.payload.device_id
             } satisfies JwtData, JWT_SECRET)
 

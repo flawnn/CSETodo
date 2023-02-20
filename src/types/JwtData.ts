@@ -1,4 +1,4 @@
 export type JwtData = {
-    _id: string;
+    id: string;
     session: string;
 }

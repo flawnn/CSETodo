@@ -67,7 +67,7 @@ const findUser = async (id: string | undefined, public_key: string | undefined):
     return user;
 }
 
-const getUserByCookies = async (cookies: Record<string, string>): Promise<Object | null> => {
+const getUserByCookies = async (cookies: Record<string, string>): Promise<JwtData | null> => {
     if (cookies.AuthorizationToken) {
     const token = cookies.AuthorizationToken.split(" ")[1];
 
@@ -87,11 +87,10 @@ const getUserByCookies = async (cookies: Record<string, string>): Promise<Object
     throw new Error("User not found");
     }
 
-    const sessionUser = {
-        _id: user.id,
-        session: jwtUser.session,
-        user: null // Seperate user object to populate on every site load
-    }
+    const sessionUser: JwtData = {
+        id: user.id,
+        session: jwtUser.session as string,
+    } satisfies JwtData
 
     return sessionUser;
     } catch (error) {
