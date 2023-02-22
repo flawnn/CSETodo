@@ -1,4 +1,4 @@
-export type Todo = {
+export type Todos = {
   // TODO: Use UUID for storage
   id: string
   text: string
