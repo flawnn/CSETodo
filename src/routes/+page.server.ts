@@ -1,22 +1,32 @@
 import { createUser } from '$root/services/users';
+import { Base64 } from 'js-base64';
+import * as forge from 'node-forge';
 import type { Actions } from './../../.svelte-kit/types/src/routes/$types.d';
 
 export const actions = {
-  register: async ({ cookies, request }) => {
-    const data = await request.formData();
+  /**
+   *  Generates symmetric and asymmetric key pairs when registering. 
+   *  Returns whether everything was successful as well as the private key to show the user for recovery
+   * 
+   * @returns 
+   */
+  register: async ({ cookies, request, locals }) => {
+	const device_id = cookies.get("device_id")!;
 
-	// Weird casts needed to have the TS linter be content
-	const session_id = data.get("session_id") as string;
-	const dek = data.get('dek') as string;
-    const public_key = data.get('public_key') as string;
+	const dek = forge.random.getBytesSync(32);
+    const key_pair = forge.pki.rsa.generateKeyPair({bits: 2048});
+	const public_key = Base64.encode(forge.pki.publicKeyToPem(key_pair.publicKey));
 
-	let res = await createUser(session_id , dek ,public_key)
+	let res = await createUser(device_id , key_pair.publicKey.encrypt(dek), public_key)
 	
 	if(res.error ?? false){
 		return res
 	} else {
 		cookies.set("sessiontoken", res.token)
-		return { success: true }
+		localStorage.setItem('dek', dek);
+		localStorage.setItem('public_key', public_key)
+
+		return { success: true, private_key: key_pair.privateKey }
 	}
   }
 } satisfies Actions;
