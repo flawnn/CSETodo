@@ -7,6 +7,8 @@ import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
 import * as forge from 'node-forge';
 
+type sanitizedUser = Omit<users, "active_sessions"> 
+
 export const POST = (async ({ params, url, request, cookies }) => {
     try{
         let body = await request.json();
@@ -34,7 +36,7 @@ export const POST = (async ({ params, url, request, cookies }) => {
 
             cookies.set("session", token);
             
-            const {active_sessions: _, ...sanitizedUser} = user
+            const sanitizedUser: sanitizedUser = user
             return new Response(JSON.stringify({
                 user: sanitizedUser
             }))
@@ -45,3 +47,5 @@ export const POST = (async ({ params, url, request, cookies }) => {
         throw error(500, "Malformed Body" + e)
     }
 }) satisfies RequestHandler;
+
+export type {sanitizedUser}
