@@ -3,13 +3,19 @@
 	import { getPublicKeyFromPrivateKey } from '$root/lib/util';
 	import '$root/styles/global.css';
 	import type { Todos } from '$root/types/Todo';
+	import { toast } from '@zerodevx/svelte-toast';
 	import { Base64 } from 'js-base64';
 	import * as forge from 'node-forge';
 	import { onMount } from 'svelte';
-	import type { PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 	import type { sanitizedUser } from './api/auth/login/+server';
 
 	export let data: PageData;
+
+	export let form: ActionData;
+
+	// Reactive Statement to execute function to save response data
+	$: registerCallback(form!);
 
 	let imagesLoaded = false;
 
@@ -32,6 +38,13 @@
 				imagesLoaded = !imagesLoaded;
 			});
 	});
+
+	async function registerCallback(form: ActionData) {
+		if (form != null) {
+			localStorage.setItem('dek', form.dek!);
+			localStorage.setItem('public_key', form.public_key!);
+		}
+	}
 
 	async function handleLogin(e: Event) {
 		const formData = new FormData(e.target as HTMLFormElement);
@@ -63,7 +76,7 @@
 		).json();
 
 		if (res.error ?? false) {
-			// Show error message in UI, something went wrong; Show Toast or smth
+			toast.push('Error while logging in');
 		} else {
 			// Show sucess toast, move on to DEK decryption
 			let user: sanitizedUser = res.user;

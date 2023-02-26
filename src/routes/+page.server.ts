@@ -23,10 +23,8 @@ export const actions = {
 		return res
 	} else {
 		cookies.set("sessiontoken", res.token)
-		localStorage.setItem('dek', dek);
-		localStorage.setItem('public_key', public_key)
 
-		return { success: true, private_key: key_pair.privateKey }
+		return { success: true, private_key: key_pair.privateKey, public_key: public_key, dek: dek }
 	}
   }
 } satisfies Actions;

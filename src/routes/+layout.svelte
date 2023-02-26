@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import type { LayoutData } from './$types';
+	import { SvelteToast } from '@zerodevx/svelte-toast'
 
 	export let data: LayoutData;
 </script>
@@ -14,4 +15,5 @@
 	/>
 </svelte:head>
 
+<SvelteToast />
 <slot />

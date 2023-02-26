@@ -12,6 +12,7 @@ specifiers:
   '@types/uuid': ^9.0.0
   '@typescript-eslint/eslint-plugin': ^5.45.0
   '@typescript-eslint/parser': ^5.45.0
+  '@zerodevx/svelte-toast': ^0.9.0
   autoprefixer: ^10.4.13
   bcryptjs: ^2.4.3
   cookie: ^0.5.0
@@ -52,6 +53,7 @@ devDependencies:
   '@types/jsonwebtoken': 9.0.1
   '@typescript-eslint/eslint-plugin': 5.51.0_z4swst3wuuqk4hlme4ajzslgh4
   '@typescript-eslint/parser': 5.51.0_7kw3g6rralp5ps6mg3uyzz6azm
+  '@zerodevx/svelte-toast': 0.9.0_svelte@3.55.1
   autoprefixer: 10.4.13_postcss@8.4.21
   eslint: 8.34.0
   eslint-config-prettier: 8.6.0_eslint@8.34.0
@@ -598,6 +600,14 @@ packages:
     dependencies:
       '@typescript-eslint/types': 5.51.0
       eslint-visitor-keys: 3.3.0
+    dev: true
+
+  /@zerodevx/svelte-toast/0.9.0_svelte@3.55.1:
+    resolution: {integrity: sha512-oHPwb5rTyqSz7tE2shS6CJapq1n5vkD46QKiloOh/VFlB20CB6IV0ZF2i4VfqH5+FW+Udf7SvjttkpIZf0wRKg==}
+    peerDependencies:
+      svelte: ^3.55.1
+    dependencies:
+      svelte: 3.55.1
     dev: true
 
   /acorn-jsx/5.3.2_acorn@8.8.2:
