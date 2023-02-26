@@ -6,11 +6,13 @@ export const load = (async ({ cookies, locals }) => {
  
   if (user) {
 	return {
-		user: user
+		user: user,
+		client_id: cookies.get("client_id")
 	}
   } else {
 	return {
-		user: undefined
+		user: undefined,
+		client_id: cookies.get("client_id")
 	}
   }
 }) satisfies LayoutServerLoad;

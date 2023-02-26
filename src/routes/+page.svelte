@@ -96,7 +96,7 @@
 			</div>
 		</div>
 	{:else}
-		<Todo {data} {todos} />
+		<Todo {data} initialTodos={todos} />
 	{/if}
 </section>
 
