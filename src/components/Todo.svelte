@@ -1,27 +1,23 @@
 <script lang="ts">
 	import '$root/styles/todos.css';
-	import type { Todo } from '$root/types/Todo';
+	import type { Todos } from '$root/types/Todo';
 	import { quintOut } from 'svelte/easing';
 	import { fade, slide } from 'svelte/transition';
 	import type { PageData } from '../routes/$types';
 	import AddTodo from './AddTodo.svelte';
 
-	let todos: Todo[] = [
-		{ id: '1', text: 'Todo 1', completed: true },
-		{ id: '2', text: 'Todo 2', completed: false },
-		{ id: '3', text: 'Todo 3', completed: false },
-		{ id: '4', text: 'Todo 4', completed: false }
-	];
+	export let initialTodos: Todos[];
 
 	export let data: PageData;
 
+	let todos = initialTodos;
 </script>
 
 <main in:fade={{ duration: 1000 }}>
 	<div class="m-2 h-14 w-14 drop-shadow-xl rounded-full fixed top-0 right-0 avatar">
 		<img
 			id="avatar"
-			src="https://source.boringavatars.com/marble/120/${data.device_id}"
+			src="https://source.boringavatars.com/marble/120/${data.client_id}"
 			class="rounded-full"
 			alt="avatar"
 		/>

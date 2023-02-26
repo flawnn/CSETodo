@@ -11,13 +11,13 @@ export const actions = {
    * @returns 
    */
   register: async ({ cookies, request, locals }) => {
-	const device_id = cookies.get("device_id")!;
+	const client_id = cookies.get("client_id")!;
 
 	const dek = forge.random.getBytesSync(32);
     const key_pair = forge.pki.rsa.generateKeyPair({bits: 2048});
 	const public_key = Base64.encode(forge.pki.publicKeyToPem(key_pair.publicKey));
 
-	let res = await createUser(device_id , key_pair.publicKey.encrypt(dek), public_key)
+	let res = await createUser(client_id , key_pair.publicKey.encrypt(dek), public_key)
 	
 	if(res.error ?? false){
 		return res

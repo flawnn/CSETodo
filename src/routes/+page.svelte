@@ -2,14 +2,24 @@
 	import Todo from '$root/components/Todo.svelte';
 	import { getPublicKeyFromPrivateKey } from '$root/lib/util';
 	import '$root/styles/global.css';
+	import type { Todos } from '$root/types/Todo';
 	import { Base64 } from 'js-base64';
 	import * as forge from 'node-forge';
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
+	import type { sanitizedUser } from './api/auth/login/+server';
 
 	export let data: PageData;
 
 	let imagesLoaded = false;
+
+	// set to data.todos
+	let todos: Todos[] = [
+		{ id: '1', text: 'Todo 1', completed: true },
+		{ id: '2', text: 'Todo 2', completed: false },
+		{ id: '3', text: 'Todo 3', completed: false },
+		{ id: '4', text: 'Todo 4', completed: false }
+	];
 
 	onMount(async () => {
 		// Fetch background image from the server
@@ -32,7 +42,7 @@
 		let public_key = getPublicKeyFromPrivateKey(private_key);
 
 		let payload = {
-			device_id: data.device_id,
+			client_id: data.client_id,
 			public_key: Base64.encode(public_key)
 		};
 
@@ -56,12 +66,21 @@
 			// Show error message in UI, something went wrong; Show Toast or smth
 		} else {
 			// Show sucess toast, move on to DEK decryption
-			let user = res.user;
+			let user: sanitizedUser = res.user;
 
 			let decrypted_dek = private_key.decrypt(user.dek);
 			localStorage.setItem('dek', decrypted_dek);
+			localStorage.setItem('public_key', public_key);
 
-			// Populate user object
+			// Populate todo object
+			var decipher = forge.cipher.createDecipher('AES-CBC', decrypted_dek);
+
+			// TODO: DON'T USE CONSTANT IV
+			decipher.start({ iv: 'GGGGGGGGGGGGGGGG' });
+			decipher.update(forge.util.createBuffer(user.todos));
+			decipher.finish();
+
+			todos = JSON.parse(decipher.output.toString());
 		}
 	}
 </script>
@@ -77,7 +96,7 @@
 			</div>
 		</div>
 	{:else}
-		<Todo {data} />
+		<Todo {data} {todos} />
 	{/if}
 </section>
 

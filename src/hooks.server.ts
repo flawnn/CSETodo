@@ -15,10 +15,10 @@ export const handle: Handle = (async ({ event, resolve }) => {
 
   event.locals.user = jwtUser!;
 
-  let uuid = event.cookies.get("device_id");
+  let uuid = event.cookies.get("client_id");
   if(uuid == null){
       uuid = uuidv4();
-      event.cookies.set("device_id", uuid)
+      event.cookies.set("client_id", uuid)
   } else if(event.locals.user != null && event.locals.user.session != uuid){
       // TODO: Reset everything, cookies have been tampered with
   }

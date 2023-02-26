@@ -7,10 +7,8 @@ declare global {
 		interface Locals {
 			user: JwtData
 		}
-		 interface PageData {
-			onboardingNeeded: boolean,
-			user: User,
-			device_id: string
+		interface PageData {
+			user: JwtData | undefined
 		}
 		// interface Platform {}
 	}

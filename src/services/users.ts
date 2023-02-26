@@ -1,6 +1,6 @@
 import { JWT_SECRET } from '$env/static/private';
 import { db } from '$root/services/db';
-import type { Todo } from '$root/types/Todo';
+import type { Todos } from '$root/types/Todo';
 import type { users } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import * as forge from 'node-forge';
@@ -103,7 +103,7 @@ const getUserByCookies = async (cookies: Record<string, string>): Promise<JwtDat
   return null;
 }
 
-const getTodos = async (id: string, dek: string): Promise<Todo[]> {
+const getTodos = async (id: string, dek: string): Promise<Todos[]> => {
     let dbUser = await findUser(id, undefined);
 
     var decipher = forge.cipher.createDecipher('AES-CBC', dek);
@@ -113,7 +113,7 @@ const getTodos = async (id: string, dek: string): Promise<Todo[]> {
     decipher.update(forge.util.createBuffer(dbUser.todos));
     decipher.finish()
 
-    const decrypted: Todo[] = JSON.parse(decipher.output.toString())
+    const decrypted: Todos[] = JSON.parse(decipher.output.toString())
 
     return decrypted;
 }
