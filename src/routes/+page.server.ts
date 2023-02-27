@@ -17,14 +17,14 @@ export const actions = {
     const key_pair = forge.pki.rsa.generateKeyPair({bits: 2048});
 	const public_key = Base64.encode(forge.pki.publicKeyToPem(key_pair.publicKey));
 
-	let res = await createUser(client_id , key_pair.publicKey.encrypt(dek), public_key)
+	let res = await createUser(client_id , Base64.encode(key_pair.publicKey.encrypt(dek)), public_key)
 	
 	if(res.error ?? false){
 		return res
 	} else {
 		cookies.set("sessiontoken", res.token)
 
-		return { success: true, private_key: key_pair.privateKey, public_key: public_key, dek: dek }
+		return { success: true, private_key: forge.pki.privateKeyToPem(key_pair.privateKey), public_key: public_key, dek: dek }
 	}
   }
 } satisfies Actions;
