@@ -12,6 +12,12 @@ declare global {
 		}
 		// interface Platform {}
 	}
+
+	namespace svelte.JSX {
+		interface HTMLAttributes<T> {
+			onclick_outside: () => void
+		}
+	}
 }
 
 export { };

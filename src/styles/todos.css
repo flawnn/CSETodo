@@ -158,7 +158,3 @@ form {
     overflow: hidden;
     border-radius: var(--radius-base);
 }
-
-.avatar {
-    z-index: 10;
-}

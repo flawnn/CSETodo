@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import '../app.css';
 	import type { LayoutData } from './$types';
-	import { SvelteToast } from '@zerodevx/svelte-toast'
 
 	export let data: LayoutData;
 </script>
