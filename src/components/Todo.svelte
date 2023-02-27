@@ -1,6 +1,8 @@
 <script lang="ts">
 	import '$root/styles/todos.css';
 	import type { Todos } from '$root/types/Todo';
+	import { Base64 } from 'js-base64';
+	import * as forge from 'node-forge';
 	import { quintOut } from 'svelte/easing';
 	import { fade, slide } from 'svelte/transition';
 	import type { PageData } from '../routes/$types';
@@ -12,10 +14,20 @@
 	export let data: PageData;
 
 	let todos = initialTodos;
+
+	let public_key = forge.pki
+		.publicKeyFromPem(Base64.decode(localStorage.getItem('public_key') as string))
+		.n.toString(16);
 </script>
 
 <main in:fade={{ duration: 1000 }}>
-	<Avatar client_id={data.client_id} />
+	<Avatar
+		client_id={data.client_id}
+		public_key={'0x' +
+			public_key.slice(0, 5) +
+			'...' +
+			public_key.slice(public_key.length - 3, public_key.length)}
+	/>
 	<div class="todos-container">
 		<h1 class="title">to-dos 🚧</h1>
 		<div class="todos">

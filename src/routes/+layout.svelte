@@ -15,5 +15,5 @@
 	/>
 </svelte:head>
 
-<SvelteToast />
+<SvelteToast options={{ pausable: true, duration: 10000 }} />
 <slot />

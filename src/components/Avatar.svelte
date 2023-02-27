@@ -4,6 +4,8 @@
 
 	export let client_id: string | undefined;
 
+	export let public_key: string;
+
 	let show = false;
 
 	function logout() {
@@ -42,6 +44,13 @@
 				out:scale={{ duration: 75, start: 0.95 }}
 				class="fixed mt-1 right-0 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
 			>
+				<div class="py-2">
+					<a
+						href="#"
+						class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+						>Public key: <span style="font-family: Space Mono;">{public_key}</span></a
+					>
+				</div>
 				<ul
 					class="py-2 text-sm text-gray-700 dark:text-gray-200"
 					aria-labelledby="dropdownDividerButton"
@@ -62,6 +71,7 @@
 						>
 					</li>
 				</ul>
+
 				<!--	<div class="py-2">
 					<a
 						href="#"

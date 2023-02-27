@@ -70,8 +70,8 @@ const findUser = async (id: string | undefined, public_key: string | undefined):
 }
 
 const getUserByCookies = async (cookies: Record<string, string>): Promise<JwtData | null> => {
-    if (cookies.AuthorizationToken) {
-    const token = cookies.AuthorizationToken.split(" ")[1];
+    if (cookies["sessiontoken"]) {
+    const token = cookies["sessiontoken"];
 
     try {
       const jwtUser = jwt.verify(token, JWT_SECRET);

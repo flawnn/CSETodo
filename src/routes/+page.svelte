@@ -14,9 +14,6 @@
 
 	export let form: ActionData;
 
-	// Reactive Statement to execute function to save response data
-	$: registerCallback(form!);
-
 	let imagesLoaded = false;
 
 	// set to data.todos
@@ -28,6 +25,19 @@
 	];
 
 	onMount(async () => {
+		if (form != null) {
+			localStorage.setItem('dek', form.dek!);
+			localStorage.setItem('public_key', form.public_key!);
+
+			if (form.error != undefined) {
+				toast.push(form.error!);
+			}
+
+			toast.push(form?.dek + ' and ' + form?.private_key);
+
+			form = null;
+		}
+
 		// Fetch background image from the server
 		fetch('https://source.unsplash.com/640x360/?mountains')
 			.then((response) => response.blob())
@@ -38,13 +48,6 @@
 				imagesLoaded = !imagesLoaded;
 			});
 	});
-
-	async function registerCallback(form: ActionData) {
-		if (form != null) {
-			localStorage.setItem('dek', form.dek!);
-			localStorage.setItem('public_key', form.public_key!);
-		}
-	}
 
 	async function handleLogin(e: Event) {
 		const formData = new FormData(e.target as HTMLFormElement);
@@ -81,7 +84,7 @@
 			// Show sucess toast, move on to DEK decryption
 			let user: sanitizedUser = res.user;
 
-			let decrypted_dek = private_key.decrypt(user.dek);
+			let decrypted_dek = private_key.decrypt(Base64.decode(user.dek));
 			localStorage.setItem('dek', decrypted_dek);
 			localStorage.setItem('public_key', public_key);
 
@@ -108,12 +111,37 @@
 				<div />
 			</div>
 		</div>
+	{:else if data.user == undefined}
+		<form id="register-form" method="POST" action="?/register">
+			<div
+				class="flex flex-col auth-container todos-container todos justify-center items-center p-8"
+			>
+				<span class="font-bold text-4xl mb-10 text-center">
+					Welcome!<br />Please Login or Sign-Up
+				</span>
+				<div class="flex flex-row min-w-full justify-items-stretch">
+					<button
+						class="grow text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+						>Login</button
+					>
+
+					<button
+						class="grow text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+						>Register</button
+					>
+				</div>
+			</div>
+		</form>
 	{:else}
 		<Todo {data} initialTodos={todos} />
 	{/if}
 </section>
 
 <style>
+	.auth-container {
+		min-height: 50%;
+	}
+
 	.spinner {
 		position: absolute;
 		top: 50%;
