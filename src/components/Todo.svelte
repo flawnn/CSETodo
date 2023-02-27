@@ -5,6 +5,7 @@
 	import { fade, slide } from 'svelte/transition';
 	import type { PageData } from '../routes/$types';
 	import AddTodo from './AddTodo.svelte';
+	import Avatar from './Avatar.svelte';
 
 	export let initialTodos: Todos[];
 
@@ -14,15 +15,7 @@
 </script>
 
 <main in:fade={{ duration: 1000 }}>
-	<div class="m-2 h-14 w-14 drop-shadow-xl rounded-full fixed top-0 right-0 avatar">
-		<img
-			id="avatar"
-			src="https://source.boringavatars.com/marble/120/${data.client_id}"
-			class="rounded-full"
-			alt="avatar"
-		/>
-		<div id="login-indicator" class="bg-red-500 absolute top-0 right-0 w-4 h-4 rounded-full" />
-	</div>
+	<Avatar client_id={data.client_id} />
 	<div class="todos-container">
 		<h1 class="title">to-dos 🚧</h1>
 		<div class="todos">
