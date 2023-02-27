@@ -2,6 +2,7 @@ import { createUser } from '$root/services/users';
 import { Base64 } from 'js-base64';
 import * as forge from 'node-forge';
 import type { Actions } from './../../.svelte-kit/types/src/routes/$types.d';
+import { getDefaultCookieOptions } from '$root/lib/util';
 
 export const actions = {
   /**
@@ -22,7 +23,7 @@ export const actions = {
 	if(res.error ?? false){
 		return res
 	} else {
-		cookies.set("sessiontoken", res.token)
+		cookies.set("sessiontoken", res.token, getDefaultCookieOptions())
 
 		return { success: true, private_key: forge.pki.privateKeyToPem(key_pair.privateKey), public_key: Base64.encode(public_key, true), dek: Base64.encode(dek, true) }
 	}

@@ -22,5 +22,14 @@ function decryptTodos(dek: string, todos: string): Todos[] {
     return decrypted
 }
 
-export { getPublicKeyFromPrivateKey, decryptTodos };
+function getDefaultCookieOptions(): Object{
+    return {
+            path: '/',
+            httpOnly: false,
+            sameSite: 'strict',
+            secure: true,
+            maxAge: 60 * 60 * 24 * 30 * 120
+        }
+}
+export { getPublicKeyFromPrivateKey, decryptTodos, getDefaultCookieOptions };
 
