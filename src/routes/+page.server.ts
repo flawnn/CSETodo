@@ -15,16 +15,16 @@ export const actions = {
 
 	const dek = forge.random.getBytesSync(32);
     const key_pair = forge.pki.rsa.generateKeyPair({bits: 2048});
-	const public_key = Base64.encode(forge.pki.publicKeyToPem(key_pair.publicKey));
+	const public_key = forge.pki.publicKeyToPem(key_pair.publicKey);
 
-	let res = await createUser(client_id , Base64.encode(key_pair.publicKey.encrypt(dek)), public_key)
+	let res = await createUser(client_id , key_pair.publicKey.encrypt(dek), public_key)
 	
 	if(res.error ?? false){
 		return res
 	} else {
 		cookies.set("sessiontoken", res.token)
 
-		return { success: true, private_key: forge.pki.privateKeyToPem(key_pair.privateKey), public_key: public_key, dek: Base64.encode(dek, true) }
+		return { success: true, private_key: forge.pki.privateKeyToPem(key_pair.privateKey), public_key: Base64.encode(public_key, true), dek: Base64.encode(dek, true) }
 	}
   }
 } satisfies Actions;
