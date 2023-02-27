@@ -24,7 +24,7 @@ export const actions = {
 	} else {
 		cookies.set("sessiontoken", res.token)
 
-		return { success: true, private_key: forge.pki.privateKeyToPem(key_pair.privateKey), public_key: public_key, dek: dek }
+		return { success: true, private_key: forge.pki.privateKeyToPem(key_pair.privateKey), public_key: public_key, dek: Base64.encode(dek, true) }
 	}
   }
 } satisfies Actions;

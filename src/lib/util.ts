@@ -9,16 +9,18 @@ function getPublicKeyFromPrivateKey(forgePrivateKey: forge.pki.rsa.PrivateKey): 
 	return publicKey;
 }
 
-function decryptTodos(dek: string, todos: string){
+function decryptTodos(dek: string, todos: string): Todos[] {
 	var decipher = forge.cipher.createDecipher('AES-CBC', dek);
 
     // TODO: DON'T USE CONSTANT IV
     decipher.start({ iv: 'GGGGGGGGGGGGGGGG' })
-    decipher.update(forge.util.createBuffer(todos));
+    decipher.update(forge.util.createBuffer(forge.util.hexToBytes(todos)));
     decipher.finish()
 
     const decrypted: Todos[] = JSON.parse(decipher.output.toString())
+
+    return decrypted
 }
 
-export { getPublicKeyFromPrivateKey };
+export { getPublicKeyFromPrivateKey, decryptTodos };
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Todo from '$root/components/Todo.svelte';
-	import { getPublicKeyFromPrivateKey } from '$root/lib/util';
+	import { decryptTodos, getPublicKeyFromPrivateKey } from '$root/lib/util';
 	import '$root/styles/global.css';
 	import type { Todos } from '$root/types/Todo';
 	import { toast } from '@zerodevx/svelte-toast';
@@ -14,7 +14,7 @@
 
 	export let form: ActionData;
 
-	let imagesLoaded = false;
+	let loadDone = false;
 
 	// set to data.todos
 	let todos: Todos[] = [
@@ -38,15 +38,19 @@
 			form = null;
 		}
 
+		// LOAD before Page shown section
 		// Fetch background image from the server
-		fetch('https://source.unsplash.com/640x360/?mountains')
-			.then((response) => response.blob())
-			.then((blob) => {
-				// Convert blob to URL to use as image source & set background image of the page
-				document.body.style.backgroundImage = `url(${URL.createObjectURL(blob)})`;
+		let blob = await (await fetch('https://source.unsplash.com/640x360/?mountains')).blob();
+		document.body.style.backgroundImage = `url(${URL.createObjectURL(blob)})`;
 
-				imagesLoaded = !imagesLoaded;
-			});
+		if (data.user != undefined) {
+			todos = decryptTodos(
+				Base64.decode(localStorage.getItem('dek')!)!,
+				await (await fetch('api/tasks')).text()
+			);
+		}
+
+		loadDone = !loadDone;
 	});
 
 	async function handleLogin(e: Event) {
@@ -102,7 +106,7 @@
 </script>
 
 <section>
-	{#if !imagesLoaded}
+	{#if !loadDone}
 		<div class="spinner">
 			<div class="lds-ring">
 				<div />
