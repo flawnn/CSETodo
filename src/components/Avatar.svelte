@@ -5,6 +5,19 @@
 	export let client_id: string | undefined;
 
 	let show = false;
+
+	function logout() {
+		localStorage.clear();
+
+		// Clearing cookies
+		document.cookie.split(';').forEach(function (c) {
+			document.cookie = c
+				.replace(/^ +/, '')
+				.replace(/=.*/, '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;');
+		});
+
+		location.reload();
+	}
 </script>
 
 <div class="fixed top-0 right-0 avatar">
@@ -43,12 +56,13 @@
 					<li>
 						<a
 							href="#"
+							on:click={logout}
 							class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-							>Earnings</a
+							>Logout</a
 						>
 					</li>
 				</ul>
-			<!--	<div class="py-2">
+				<!--	<div class="py-2">
 					<a
 						href="#"
 						class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
