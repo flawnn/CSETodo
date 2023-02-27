@@ -34,7 +34,7 @@ export const POST = (async ({ params, url, request, cookies }) => {
                 session: body.payload.client_id
             } satisfies JwtData, JWT_SECRET)
 
-            cookies.set("session", token);
+            cookies.set("sessiontoken", token);
             
             const sanitizedUser: sanitizedUser = user
             return new Response(JSON.stringify({
