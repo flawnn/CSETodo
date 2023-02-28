@@ -1,4 +1,5 @@
 import { JWT_SECRET } from '$env/static/private';
+import { encryptTodos } from '$root/lib/util';
 import { db } from '$root/services/db';
 import type { users } from '@prisma/client';
 import { Base64 } from 'js-base64';
@@ -16,15 +17,12 @@ const createUser = async (session_id: string, dek: string, publicKey: forge.pki.
     })
     
     // Generate default set of todos
-    var cipher = forge.cipher.createCipher('AES-CBC', dek)
-    cipher.start({ iv: 'GGGGGGGGGGGGGGGG' });
-    cipher.update(
-        forge.util.createBuffer(
-            '[{"id":"1","text":"Todo 1","completed":true},{"id":"2","text":"Todo 2","completed":false},{"id":"3","text":"Todo 3","completed":false},{"id":"4","text":"Todo 4","completed":false}]'
-        )
-    );
-    cipher.finish();
-    var encrypted = cipher.output;
+    var encrypted = encryptTodos(dek, [
+		{ id: '1', text: 'Todo 1', completed: true },
+		{ id: '2', text: 'Todo 2', completed: false },
+		{ id: '3', text: 'Todo 3', completed: false },
+		{ id: '4', text: 'Todo 4', completed: false }
+	]);
 
 
     if(!existingUser){
@@ -37,7 +35,7 @@ const createUser = async (session_id: string, dek: string, publicKey: forge.pki.
                     public_key: Base64.encode(public_key_pem),
                     active_sessions: [session_id],
                     dek: Base64.encode(publicKey.encrypt(dek)),
-                    todos: encrypted.toHex()
+                    todos: encrypted
                 }
             }) as Partial<ThenArg<ReturnType<typeof db.users.create>>>
 
