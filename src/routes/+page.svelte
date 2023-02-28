@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Todo from '$root/components/Todo.svelte';
+	import { clickOutside } from '$root/lib/click_outside';
 	import { decryptTodos, getPublicKeyFromPrivateKey } from '$root/lib/util';
 	import '$root/styles/global.css';
 	import type { Todos } from '$root/types/Todo';
@@ -7,6 +8,7 @@
 	import { Base64 } from 'js-base64';
 	import * as forge from 'node-forge';
 	import { onMount } from 'svelte';
+	import { scale } from 'svelte/transition';
 	import type { ActionData, PageData } from './$types';
 	import type { sanitizedUser } from './api/auth/login/+server';
 
@@ -15,6 +17,8 @@
 	export let form: ActionData;
 
 	let loadDone = false;
+
+	let showRegisterForm = false;
 
 	let todos: Todos[] = [
 		{ id: '1', text: 'Todo 1', completed: true },
@@ -53,53 +57,48 @@
 	});
 
 	async function handleLogin(e: Event) {
-		const formData = new FormData(e.target as HTMLFormElement);
+		try {
+			const formData = new FormData(e.target as HTMLFormElement);
 
-		let private_key = forge.pki.privateKeyFromPem(
-			(formData.get('pkey') as FormDataEntryValue).toString()
-		);
-		let public_key = getPublicKeyFromPrivateKey(private_key);
+			let private_key = forge.pki.privateKeyFromPem(
+				(formData.get('private_key') as FormDataEntryValue).toString()
+			);
+			let public_key = getPublicKeyFromPrivateKey(private_key);
 
-		let payload = {
-			client_id: data.client_id,
-			public_key: Base64.encode(public_key)
-		};
+			let payload = {
+				client_id: data.client_id,
+				public_key: Base64.encode(public_key)
+			};
 
-		var md = forge.md.sha1.create();
-		md.update(JSON.stringify(payload), 'utf8');
-		let signature = private_key.sign(md);
+			var md = forge.md.sha1.create();
+			md.update(JSON.stringify(payload), 'utf8');
+			let signature = private_key.sign(md);
 
-		let body = {
-			payload: payload,
-			signature: signature
-		};
+			let body = {
+				payload: payload,
+				signature: signature
+			};
 
-		let res = await (
-			await fetch('/api/auth/login', {
-				body: JSON.stringify(body),
-				method: 'POST'
-			})
-		).json();
+			let res = await (
+				await fetch('/api/auth/login', {
+					body: JSON.stringify(body),
+					method: 'POST'
+				})
+			).json();
 
-		if (res.error ?? false) {
-			toast.push('Error while logging in');
-		} else {
-			// Show sucess toast, move on to DEK decryption
-			let user: sanitizedUser = res.user;
+			if (res.error ?? false) {
+				toast.push('Error while logging in');
+			} else {
+				let user: sanitizedUser = res.user;
 
-			let decrypted_dek = private_key.decrypt(Base64.decode(user.dek));
-			localStorage.setItem('dek', decrypted_dek);
-			localStorage.setItem('public_key', public_key);
+				let decrypted_dek = private_key.decrypt(Base64.decode(user.dek));
+				localStorage.setItem('dek', Base64.encode(decrypted_dek));
+				localStorage.setItem('public_key', Base64.encode(public_key, true));
 
-			// Populate todo object
-			var decipher = forge.cipher.createDecipher('AES-CBC', decrypted_dek);
-
-			// TODO: DON'T USE CONSTANT IV
-			decipher.start({ iv: 'GGGGGGGGGGGGGGGG' });
-			decipher.update(forge.util.createBuffer(user.todos));
-			decipher.finish();
-
-			todos = JSON.parse(decipher.output.toString());
+				location.reload();
+			}
+		} catch (e) {
+			toast.push(e as string);
 		}
 	}
 </script>
@@ -115,26 +114,64 @@
 			</div>
 		</div>
 	{:else if data.user == undefined}
-		<form id="register-form" method="POST" action="?/register">
-			<div
-				class="flex flex-col auth-container todos-container todos justify-center items-center p-8"
-			>
-				<span class="font-bold text-4xl mb-10 text-center">
-					Welcome!<br />Please Login or Sign-Up
-				</span>
-				<div class="flex flex-row min-w-full justify-items-stretch">
+		{#if !showRegisterForm}
+			<form id="register-form" method="POST" action="?/register">
+				<div
+					in:scale={{ duration: 100, start: 0.95 }}
+					out:scale={{ duration: 75, start: 0.95 }}
+					class="flex flex-col auth-container todos-container todos justify-center items-center p-8"
+				>
+					<span class="font-bold text-4xl mb-10 text-center">
+						Welcome!<br />Please Login or Sign-Up
+					</span>
+					<div class="flex flex-row min-w-full justify-items-stretch">
+						<button
+							on:click|preventDefault={() => (showRegisterForm = true)}
+							class="grow text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+							>Login</button
+						>
+
+						<button
+							class="grow text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+							>Register</button
+						>
+					</div>
+				</div>
+			</form>
+		{:else}
+			<form id="login-form" method="POST" on:submit|preventDefault={handleLogin}>
+				<div
+					in:scale={{ duration: 100, start: 0.95 }}
+					out:scale={{ duration: 75, start: 0.95 }}
+					use:clickOutside
+					on:click_outside={() => (showRegisterForm = false)}
+					class="flex flex-col auth-container todos-container todos justify-center items-stretch p-8"
+				>
+					<span class="font-bold text-4xl mb-10 text-center"> What is your private key? </span>
+					<div class="min-w-full h-48">
+						<div class="min-w-full ">
+							<label
+								for="private_key"
+								class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+								>Private Key</label
+							>
+							<textarea
+								class="h-48 min-w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+								name="private_key"
+								form="login-form"
+								placeholder="-----BEGIN RSA PRIVATE KEY----- ..."
+								id="private_key"
+								required
+							/>
+						</div>
+					</div>
 					<button
-						class="grow text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+						class="mt-8 min-w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
 						>Login</button
 					>
-
-					<button
-						class="grow text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-						>Register</button
-					>
 				</div>
-			</div>
-		</form>
+			</form>
+		{/if}
 	{:else}
 		<Todo {data} initialTodos={todos} />
 	{/if}

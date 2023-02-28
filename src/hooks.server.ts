@@ -9,7 +9,6 @@ export const handle: Handle = (async ({ event, resolve }) => {
   const cookies = parse(headers.get("cookie") ?? "");
   let jwtUser = await getUserByCookies(cookies);
 
-
   if(jwtUser == null && (event.url.pathname.startsWith("/api/tasks") || event.url.pathname.startsWith("/api/user"))){
     throw error(401, "Unauthorized")
   } 

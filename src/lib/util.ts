@@ -27,7 +27,7 @@ function getDefaultCookieOptions(): Object{
             path: '/',
             httpOnly: false,
             sameSite: 'strict',
-            secure: true,
+            secure: false,
             maxAge: 60 * 60 * 24 * 30 * 120
         }
 }

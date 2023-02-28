@@ -1,4 +1,5 @@
 import { JWT_SECRET } from '$env/static/private';
+import { getDefaultCookieOptions } from '$root/lib/util';
 import { findUser } from '$root/services/users';
 import type { JwtData } from '$root/types/JwtData';
 import type { users } from '@prisma/client';
@@ -34,12 +35,14 @@ export const POST = (async ({ params, url, request, cookies }) => {
                 session: body.payload.client_id
             } satisfies JwtData, JWT_SECRET)
 
-            cookies.set("sessiontoken", token);
+            cookies.set("sessiontoken", token, getDefaultCookieOptions());
             
             const sanitizedUser: sanitizedUser = user
+
             return new Response(JSON.stringify({
                 user: sanitizedUser
             }))
+
         } else {
             throw error(500, "Malformed signature");
         }
@@ -48,4 +51,5 @@ export const POST = (async ({ params, url, request, cookies }) => {
     }
 }) satisfies RequestHandler;
 
-export type {sanitizedUser}
+export type { sanitizedUser };
+

@@ -1,8 +1,8 @@
+import { getDefaultCookieOptions } from '$root/lib/util';
 import { createUser } from '$root/services/users';
 import { Base64 } from 'js-base64';
 import * as forge from 'node-forge';
 import type { Actions } from './../../.svelte-kit/types/src/routes/$types.d';
-import { getDefaultCookieOptions } from '$root/lib/util';
 
 export const actions = {
   /**
