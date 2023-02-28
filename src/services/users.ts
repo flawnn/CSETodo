@@ -6,10 +6,12 @@ import jwt from 'jsonwebtoken';
 import * as forge from 'node-forge';
 import type { JwtData } from './../types/JwtData';
 
-const createUser = async (session_id: string, dek: string, public_key: string) => {
+const createUser = async (session_id: string, dek: string, publicKey: forge.pki.rsa.PublicKey) => {
+    let public_key_pem = forge.pki.publicKeyToPem(publicKey)
+
     let existingUser = await db.users.findFirst({
         where: {
-            public_key
+            public_key: public_key_pem
         }
     })
     
@@ -32,9 +34,9 @@ const createUser = async (session_id: string, dek: string, public_key: string) =
 
             newUser = await db.users.create({
                 data: {
-                    public_key: Base64.encode(public_key),
+                    public_key: Base64.encode(public_key_pem),
                     active_sessions: [session_id],
-                    dek: Base64.encode(dek),
+                    dek: Base64.encode(publicKey.encrypt(dek)),
                     todos: encrypted.toHex()
                 }
             }) as Partial<ThenArg<ReturnType<typeof db.users.create>>>

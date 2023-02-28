@@ -29,16 +29,22 @@
 
 	onMount(async () => {
 		if (form != null) {
-			localStorage.setItem('dek', form.dek!);
-			localStorage.setItem('public_key', form.public_key!);
-
 			if (form.error != undefined) {
 				toast.push(form.error!);
+			} else {
+				localStorage.setItem('dek', form.dek!);
+				localStorage.setItem('public_key', form.public_key!);
+				sessionStorage.setItem('private_key', form.private_key!);
+
+				location.href = '/';
 			}
+		}
 
-			toast.push(form?.dek + ' and ' + form?.private_key);
+		// Show private key on root page reload
+		if (window.location.search == '' && sessionStorage.getItem('private_key') != null) {
+			toast.push(sessionStorage.getItem('private_key')!);
 
-			form = null;
+			sessionStorage.removeItem('private_key');
 		}
 
 		// LOAD before Page shown section

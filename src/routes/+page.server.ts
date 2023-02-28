@@ -18,7 +18,7 @@ export const actions = {
     const key_pair = forge.pki.rsa.generateKeyPair({bits: 2048});
 	const public_key = forge.pki.publicKeyToPem(key_pair.publicKey);
 
-	let res = await createUser(client_id , key_pair.publicKey.encrypt(dek), public_key)
+	let res = await createUser(client_id , dek, key_pair.publicKey)
 	
 	if(res.error ?? false){
 		return res
