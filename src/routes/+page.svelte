@@ -55,7 +55,7 @@
 		if (data.user != undefined) {
 			todos = decryptTodos(
 				Base64.decode(localStorage.getItem('dek')!)!,
-				await (await fetch('api/tasks')).text()
+				await (await fetch('/api/tasks')).text()
 			);
 		}
 

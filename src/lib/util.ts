@@ -35,6 +35,25 @@ function encryptTodos(dek: string, todos: Todos[]): string {
     return Base64.encode(cipher.output.toHex());
 }
 
+async function updateTodosFromServer(todos: Todos[], id: string, dek: string): Promise<Todos[]> {
+    		debugger;
+    let res = await (await fetch('/api/tasks', {
+				method: 'GET',
+                credentials: "same-origin",
+    })).text();
+
+    let decrypted = decryptTodos(dek, res);
+
+    for(let todo of decrypted) {
+        let counterpart = todos.some(x => x.id == todo.id)
+
+        if(!counterpart) {
+            todos.push(todo)
+        }
+    }
+
+    return todos;
+}
 function getDefaultCookieOptions(): Object{
     return {
             path: '/',
@@ -44,5 +63,5 @@ function getDefaultCookieOptions(): Object{
             maxAge: 60 * 60 * 24 * 30 * 120
         }
 }
-export { getPublicKeyFromPrivateKey, decryptTodos, encryptTodos, getDefaultCookieOptions };
+export { updateTodosFromServer, getPublicKeyFromPrivateKey, decryptTodos, encryptTodos, getDefaultCookieOptions };
 

@@ -33,7 +33,6 @@
 				Base64.decode(localStorage.getItem('dek')!)
 			);
 
-			debugger;
 			let encrypted = encryptTodos(Base64.decode(localStorage.getItem('dek')!), newTodos);
 
 			let res = await fetch('/api/tasks', {

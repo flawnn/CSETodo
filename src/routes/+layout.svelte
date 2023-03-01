@@ -8,8 +8,9 @@
 
 	onMount(() => {
 		if (
-			localStorage.getItem('dek') == undefined ||
-			localStorage.getItem('public_key') == undefined
+			(localStorage.getItem('dek') == undefined ||
+				localStorage.getItem('public_key') == undefined) &&
+			data.user != null
 		) {
 			localStorage.clear();
 
@@ -20,6 +21,7 @@
 					.replace(/=.*/, '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;');
 			});
 
+			debugger;
 			location.reload();
 		}
 	});
