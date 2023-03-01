@@ -15,7 +15,9 @@
 
 	export let data: PageData;
 
-	let todos = initialTodos;
+	let todos = initialTodos.map((a) => {
+		return { ...a };
+	});
 
 	let public_key = forge.pki
 		.publicKeyFromPem(Base64.decode(localStorage.getItem('public_key') as string))
@@ -27,12 +29,6 @@
 
 	async function pushTasksToDB(newTodos: Todos[]) {
 		if (newTodos != initialTodos) {
-			initialTodos = await updateTodosFromServer(
-				newTodos,
-				data.user?.id!,
-				Base64.decode(localStorage.getItem('dek')!)
-			);
-
 			let encrypted = encryptTodos(Base64.decode(localStorage.getItem('dek')!), newTodos);
 
 			let res = await fetch('/api/tasks', {
@@ -50,15 +46,25 @@
 				toast.push('Error while updating Todos. Try adding another one or reload page.');
 			}
 		}
-
-		newTodos = todos;
 	}
 	// methods
 	function generateRandomId(): string {
 		return Math.random().toString(16).slice(2);
 	}
 
-	function addTodo(todo: string): void {
+	async function fetchTodos() {
+		await updateTodosFromServer(
+			initialTodos,
+			data.user?.id!,
+			Base64.decode(localStorage.getItem('dek')!)
+		);
+
+		todos = initialTodos;
+	}
+
+	async function addTodo(todo: string) {
+		await fetchTodos();
+
 		let newTodo: Todos = {
 			id: generateRandomId(),
 			text: todo,
@@ -67,7 +73,8 @@
 		todos = [...todos, newTodo];
 	}
 
-	function toggleCompleted(event: MouseEvent): void {
+	async function toggleCompleted(event: MouseEvent) {
+		await fetchTodos();
 		let { checked } = event.target as HTMLInputElement;
 
 		todos = todos.map((todo) => ({
@@ -76,13 +83,19 @@
 		}));
 	}
 
-	function completeTodo(id: string): void {
+	async function completeTodo(id: string) {
+		await fetchTodos();
 		todos = todos.map((todo) => {
 			if (todo.id === id) {
 				todo.completed = !todo.completed;
 			}
 			return todo;
 		});
+	}
+
+	async function removeTodo(id: string) {
+		await fetchTodos();
+		todos = todos.filter((todo) => todo.id !== id);
 	}
 </script>
 
@@ -114,7 +127,11 @@
 									<label aria-label="Check todo" class="todo-check" for="todo" />
 								</div>
 								<span class:completed={todo.completed} class="todo-text">{todo.text}</span>
-								<button aria-label="Remove todo" class="remove" />
+								<button
+									aria-label="Remove todo"
+									on:click={() => removeTodo(todo.id)}
+									class="remove"
+								/>
 							</div>
 						</li>
 					{/each}
