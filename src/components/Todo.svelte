@@ -75,6 +75,15 @@
 			completed: checked
 		}));
 	}
+
+	function completeTodo(id: string): void {
+		todos = todos.map((todo) => {
+			if (todo.id === id) {
+				todo.completed = !todo.completed;
+			}
+			return todo;
+		});
+	}
 </script>
 
 <main in:fade={{ duration: 1000 }}>
@@ -95,10 +104,16 @@
 						<li class="todo" transition:slide={{ delay: 250, duration: 300, easing: quintOut }}>
 							<div class="todo-item">
 								<div>
-									<input checked={todo.completed} id="todo" class="toggle" type="checkbox" />
+									<input
+										on:change={() => completeTodo(todo.id)}
+										checked={todo.completed}
+										id="todo"
+										class="toggle"
+										type="checkbox"
+									/>
 									<label aria-label="Check todo" class="todo-check" for="todo" />
 								</div>
-								<span class="todo-text">{todo.text}</span>
+								<span class:completed={todo.completed} class="todo-text">{todo.text}</span>
 								<button aria-label="Remove todo" class="remove" />
 							</div>
 						</li>
