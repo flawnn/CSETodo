@@ -25,6 +25,7 @@
 
 	// computed
 	$: todosAmount = todos.length;
+	$: incompleteTodos = todos.filter((todo) => !todo.completed).length;
 	$: pushTasksToDB(todos);
 
 	async function pushTasksToDB(newTodos: Todos[]) {
@@ -125,7 +126,10 @@
 				</ul>
 
 				<div class="actions">
-					<span class="todo-count">0 left</span>
+					<span class="todo-count">
+						{incompleteTodos}
+						{incompleteTodos === 1 ? 'item' : 'items'} left</span
+					>
 					<div class="filters">
 						<button class="filter">All</button>
 						<button class="filter">Active</button>
