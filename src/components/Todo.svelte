@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { encryptTodos, updateTodosFromServer } from '$root/lib/util';
 	import '$root/styles/todos.css';
-	import type { Todos } from '$root/types/Todo';
+	import type { FiltersType, Todos } from '$root/types/Todo';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { Base64 } from 'js-base64';
 	import * as forge from 'node-forge';
@@ -15,6 +15,8 @@
 
 	export let data: PageData;
 
+	let selectedFilter: FiltersType = 'all';
+
 	let todos = initialTodos.map((a) => {
 		return { ...a };
 	});
@@ -26,6 +28,8 @@
 	// computed
 	$: todosAmount = todos.length;
 	$: incompleteTodos = todos.filter((todo) => !todo.completed).length;
+	$: filteredTodos = filterTodos(todos, selectedFilter);
+
 	$: pushTasksToDB(todos);
 
 	async function pushTasksToDB(newTodos: Todos[]) {
@@ -104,6 +108,23 @@
 		let currentTodo = todos.findIndex((todo) => todo.id === id);
 		todos[currentTodo].text = newTodo;
 	}
+
+	function setFilter(newFilter: any): void {
+		selectedFilter = newFilter;
+	}
+
+	function filterTodos(todos: Todos[], filter: any): Todos[] {
+		switch (filter) {
+			default:
+				return todos;
+			case 'active':
+				return todos.filter((todo) => !todo.completed);
+			case 'completed':
+				return todos.filter((todo) => todo.completed);
+		}
+	}
+
+	let filters = ['all', 'active', 'completed'];
 </script>
 
 <main in:fade={{ duration: 1000 }}>
@@ -120,7 +141,7 @@
 			<AddTodo {addTodo} {toggleCompleted} {todosAmount} />
 			{#if todosAmount}
 				<ul class="todo-list">
-					{#each todos as todo (todo.id)}
+					{#each filteredTodos as todo (todo.id)}
 						<TodoElement {removeTodo} {completeTodo} {todo} {editTodo} />
 					{/each}
 				</ul>
@@ -131,9 +152,15 @@
 						{incompleteTodos === 1 ? 'item' : 'items'} left</span
 					>
 					<div class="filters">
-						<button class="filter">All</button>
-						<button class="filter">Active</button>
-						<button class="filter">Completed</button>
+						{#each filters as filter}
+							<button
+								on:click={() => setFilter(filter)}
+								class:selected={selectedFilter === filter}
+								class="filter"
+							>
+								{filter}
+							</button>
+						{/each}
 					</div>
 					<button class="clear-completed">Clear completed</button>
 				</div>
