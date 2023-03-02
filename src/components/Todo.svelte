@@ -29,7 +29,7 @@
 	$: todosAmount = todos.length;
 	$: incompleteTodos = todos.filter((todo) => !todo.completed).length;
 	$: filteredTodos = filterTodos(todos, selectedFilter);
-
+	$: completedTodos = todos.filter((todo) => todo.completed).length;
 	$: pushTasksToDB(todos);
 
 	async function pushTasksToDB(newTodos: Todos[]) {
@@ -125,6 +125,10 @@
 	}
 
 	let filters = ['all', 'active', 'completed'];
+
+	function clearCompleted(): void {
+		todos = todos.filter((todo) => todo.completed !== true);
+	}
 </script>
 
 <main in:fade={{ duration: 1000 }}>
@@ -162,7 +166,11 @@
 							</button>
 						{/each}
 					</div>
-					<button class="clear-completed">Clear completed</button>
+					<button
+						on:click={clearCompleted}
+						class:hidden={completedTodos === 0}
+						class="clear-completed">Clear completed</button
+					>
 				</div>
 			{/if}
 		</div>
