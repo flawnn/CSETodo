@@ -98,6 +98,11 @@
 		await fetchTodos();
 		todos = todos.filter((todo) => todo.id !== id);
 	}
+
+	function editTodo(id: string, newTodo: string): void {
+		let currentTodo = todos.findIndex((todo) => todo.id === id);
+		todos[currentTodo].text = newTodo;
+	}
 </script>
 
 <main in:fade={{ duration: 1000 }}>
@@ -115,7 +120,7 @@
 			{#if todosAmount}
 				<ul class="todo-list">
 					{#each todos as todo (todo.id)}
-						<TodoElement {removeTodo} {completeTodo} {todo} />
+						<TodoElement {removeTodo} {completeTodo} {todo} {editTodo} />
 					{/each}
 				</ul>
 
