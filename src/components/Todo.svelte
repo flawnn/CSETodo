@@ -5,11 +5,11 @@
 	import { toast } from '@zerodevx/svelte-toast';
 	import { Base64 } from 'js-base64';
 	import * as forge from 'node-forge';
-	import { quintOut } from 'svelte/easing';
-	import { fade, slide } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 	import type { PageData } from '../routes/$types';
 	import AddTodo from './AddTodo.svelte';
 	import Avatar from './Avatar.svelte';
+	import TodoElement from './TodoElement.svelte';
 
 	export let initialTodos: Todos[];
 
@@ -47,7 +47,8 @@
 			}
 		}
 	}
-	// methods
+
+	// TODO callbacks
 	function generateRandomId(): string {
 		return Math.random().toString(16).slice(2);
 	}
@@ -114,26 +115,7 @@
 			{#if todosAmount}
 				<ul class="todo-list">
 					{#each todos as todo (todo.id)}
-						<li class="todo" transition:slide={{ delay: 250, duration: 300, easing: quintOut }}>
-							<div class="todo-item">
-								<div>
-									<input
-										on:change={() => completeTodo(todo.id)}
-										checked={todo.completed}
-										id="todo"
-										class="toggle"
-										type="checkbox"
-									/>
-									<label aria-label="Check todo" class="todo-check" for="todo" />
-								</div>
-								<span class:completed={todo.completed} class="todo-text">{todo.text}</span>
-								<button
-									aria-label="Remove todo"
-									on:click={() => removeTodo(todo.id)}
-									class="remove"
-								/>
-							</div>
-						</li>
+						<TodoElement {removeTodo} {completeTodo} {todo} />
 					{/each}
 				</ul>
 
