@@ -1,9 +1,9 @@
-# E2EE Todo App
+# CSE Todo App
 
-This is a simple todo web app, inspired by TodoMVC, and supported by SvelteKit.
+This is a simple, client-side encrypted todo web app, inspired by TodoMVC, and supported by SvelteKit.
 It has basic CRUD abilites, meaning you can create, view, update and delete your todos.
 
-A live demo can be found [here](https://e2-ee-todo.vercel.app/)
+A live demo can be found [here](https://cse-todo.vercel.app)
 
 ### Application Architecture
 
