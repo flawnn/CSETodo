@@ -4,7 +4,7 @@ import { db } from '$root/services/db';
 import type { users } from '@prisma/client';
 import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
-import * as forge from 'node-forge';
+import forge from "node-forge";
 import type { JwtData } from './../types/JwtData';
 
 const createUser = async (session_id: string, dek: string, publicKey: forge.pki.rsa.PublicKey) => {

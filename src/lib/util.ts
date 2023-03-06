@@ -1,6 +1,6 @@
 import type { Todos } from '$root/types/Todo';
 import { Base64 } from 'js-base64';
-import * as forge from 'node-forge';
+import forge from "node-forge";
 
 function getPublicKeyFromPrivateKey(forgePrivateKey: forge.pki.rsa.PrivateKey): string {
 	var forgePublicKey = forge.pki.setRsaPublicKey(forgePrivateKey.n, forgePrivateKey.e);
@@ -63,5 +63,5 @@ function getDefaultCookieOptions(): Object{
             maxAge: 60 * 60 * 24 * 30 * 120
         }
 }
-export { updateTodosFromServer, getPublicKeyFromPrivateKey, decryptTodos, encryptTodos, getDefaultCookieOptions };
+export { decryptTodos, encryptTodos, getDefaultCookieOptions, getPublicKeyFromPrivateKey, updateTodosFromServer };
 

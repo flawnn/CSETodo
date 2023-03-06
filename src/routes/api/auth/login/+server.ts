@@ -6,7 +6,7 @@ import type { users } from '@prisma/client';
 import { error, type RequestHandler } from "@sveltejs/kit";
 import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
-import * as forge from 'node-forge';
+import forge from "node-forge";
 
 type sanitizedUser = Omit<users, "active_sessions"> 
 

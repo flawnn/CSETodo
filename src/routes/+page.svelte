@@ -6,7 +6,7 @@
 	import type { Todos } from '$root/types/Todo';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { Base64 } from 'js-base64';
-	import * as forge from 'node-forge';
+	import forge from 'node-forge';
 	import { onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import type { ActionData, PageData } from './$types';
