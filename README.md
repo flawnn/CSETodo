@@ -3,6 +3,8 @@
 This is a simple todo web app, inspired by TodoMVC, and supported by SvelteKit.
 It has basic CRUD abilites, meaning you can create, view, update and delete your todos.
 
+A live demo can be found [here](https://e2-ee-todo.vercel.app/)
+
 ### Application Architecture
 
 The rough application architecture can be seen on [this](https://drive.google.com/file/d/1PMfS435HpT5ICBRcgiRqN9r_kv8vFhAE/view?usp=sharing) collection of diagrams.
