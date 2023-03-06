@@ -1,3 +1,4 @@
+import type { sanitizedUser } from './../../../../types/User';
 import { JWT_SECRET } from '$env/static/private';
 import { getDefaultCookieOptions } from '$root/lib/util';
 import { findUser } from '$root/services/users';
@@ -8,7 +9,7 @@ import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
 import forge from "node-forge";
 
-type sanitizedUser = Omit<users, "active_sessions"> 
+
 
 export const POST = (async ({ params, url, request, cookies }) => {
     try{
@@ -50,6 +51,3 @@ export const POST = (async ({ params, url, request, cookies }) => {
         throw error(500, "Malformed Body" + e)
     }
 }) satisfies RequestHandler;
-
-export type { sanitizedUser };
-

@@ -35,8 +35,13 @@ function encryptTodos(dek: string, todos: Todos[]): string {
     return Base64.encode(cipher.output.toHex());
 }
 
-async function updateTodosFromServer(todos: Todos[], id: string, dek: string): Promise<Todos[]> {
-    		debugger;
+/**
+ * TODO: This actually doesn't work as it is supposed to be. For one, deleted and modified todos are not reflected,
+ * and due to Prisma, using the app simultaneously on two devices, breaks the app and lets the server crash. 
+ * Refreshing while using the app would need a massive Refactor of the way we interact with the database and logic
+ *  */ 
+/* 
+async function updateTodosFromServer(todos: Todos[], dek: string): Promise<Todos[]> {
     let res = await (await fetch('/api/tasks', {
 				method: 'GET',
                 credentials: "same-origin",
@@ -54,6 +59,8 @@ async function updateTodosFromServer(todos: Todos[], id: string, dek: string): P
 
     return todos;
 }
+*/
+
 function getDefaultCookieOptions(): Object{
     return {
             path: '/',
@@ -63,5 +70,5 @@ function getDefaultCookieOptions(): Object{
             maxAge: 60 * 60 * 24 * 30 * 120
         }
 }
-export { decryptTodos, encryptTodos, getDefaultCookieOptions, getPublicKeyFromPrivateKey, updateTodosFromServer };
+export { decryptTodos, encryptTodos, getDefaultCookieOptions, getPublicKeyFromPrivateKey};
 

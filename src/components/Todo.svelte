@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { encryptTodos, updateTodosFromServer } from '$root/lib/util';
+	import { encryptTodos } from '$root/lib/util';
 	import '$root/styles/todos.css';
 	import type { FiltersType, Todos } from '$root/types/Todo';
 	import { toast } from '@zerodevx/svelte-toast';
@@ -53,19 +53,15 @@
 		}
 	}
 
-	// TODO callbacks
 	function generateRandomId(): string {
 		return Math.random().toString(16).slice(2);
 	}
 
 	async function fetchTodos() {
-		await updateTodosFromServer(
-			initialTodos,
-			data.user?.id!,
-			Base64.decode(localStorage.getItem('dek')!)
-		);
+		// TODO: Implement
+		/* await updateTodosFromServer(initialTodos, Base64.decode(localStorage.getItem('dek')!));
 
-		todos = initialTodos;
+		todos = initialTodos; */
 	}
 
 	async function addTodo(todo: string) {

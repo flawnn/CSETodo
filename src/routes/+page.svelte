@@ -4,30 +4,23 @@
 	import { decryptTodos, getPublicKeyFromPrivateKey } from '$root/lib/util';
 	import '$root/styles/global.css';
 	import type { Todos } from '$root/types/Todo';
+	import type { sanitizedUser } from '$root/types/User';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { Base64 } from 'js-base64';
 	import forge from 'node-forge';
 	import { onMount } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import type { ActionData, PageData } from './$types';
-	import type { sanitizedUser } from './api/auth/login/+server';
 
 	export let data: PageData;
-
 	export let form: ActionData;
 
 	let loadDone = false;
-
 	let showRegisterForm = false;
-
-	let todos: Todos[] = [
-		{ id: '1', text: 'Todo 1', completed: true },
-		{ id: '2', text: 'Todo 2', completed: false },
-		{ id: '3', text: 'Todo 3', completed: false },
-		{ id: '4', text: 'Todo 4', completed: false }
-	];
+	let todos: Todos[];
 
 	onMount(async () => {
+		// Only to be executed after having registered to save relevant data in browser
 		if (form != null) {
 			if (form.error != undefined) {
 				toast.push(form.error!);
@@ -47,7 +40,6 @@
 			sessionStorage.removeItem('private_key');
 		}
 
-		// LOAD before Page shown section
 		// Fetch background image from the server
 		let blob = await (await fetch('https://source.unsplash.com/640x360/?mountains')).blob();
 		document.body.style.backgroundImage = `url(${URL.createObjectURL(blob)})`;
