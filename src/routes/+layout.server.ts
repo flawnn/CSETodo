@@ -1,19 +1,11 @@
-import { getTodos } from "$root/services/users";
 import type { LayoutServerLoad } from "./$types";
 
 
 export const load = (async ({ cookies, locals }) => {
-  const user = locals.user;
+  	const user = locals.user;
  
-  if (user) {
 	return {
-		user: user,
+		user: user ?? undefined,
 		client_id: cookies.get("client_id")
 	}
-  } else {
-	return {
-		user: undefined,
-		client_id: cookies.get("client_id")
-	}
-  }
 }) satisfies LayoutServerLoad;
