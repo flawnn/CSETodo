@@ -19,7 +19,7 @@ export const handle: Handle = (async ({ event, resolve }) => {
   if(uuid == null){
       uuid = uuidv4();
       event.cookies.set("client_id", uuid, getDefaultCookieOptions())
-  } else if(event.locals.user != null && event.locals.user.session != uuid){
+  } else if(event.locals.user != null && event.locals.user.client_id != uuid){
       // TODO: Reset everything, cookies have been tampered with
   }
 

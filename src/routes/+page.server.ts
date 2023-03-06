@@ -9,9 +9,8 @@ export const actions = {
    *  Generates symmetric and asymmetric key pairs when registering. 
    *  Returns whether everything was successful as well as the private key to show the user for recovery
    * 
-   * @returns 
    */
-  register: async ({ cookies, request, locals }) => {
+  register: async ({ cookies }) => {
 	const client_id = cookies.get("client_id")!;
 
 	const dek = forge.random.getBytesSync(32);

@@ -32,7 +32,7 @@ export const POST = (async ({ params, url, request, cookies }) => {
 
             let token = jwt.sign({
                 id: user.id,
-                session: body.payload.client_id
+                client_id: body.payload.client_id
             } satisfies JwtData, JWT_SECRET)
 
             cookies.set("sessiontoken", token, getDefaultCookieOptions());

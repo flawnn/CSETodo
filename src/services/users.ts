@@ -45,7 +45,7 @@ const createUser = async (session_id: string, dek: string, publicKey: forge.pki.
 
 		const jwtData: JwtData = {
 			id: newUser.id!,
-			session: session_id
+			client_id: session_id
 		};
 
 		const token = jwt.sign(jwtData, JWT_SECRET);
@@ -102,7 +102,7 @@ const getUserByCookies = async (cookies: Record<string, string>): Promise<JwtDat
 
 			const sessionUser: JwtData = {
 				id: user.id,
-				session: jwtUser.session as string
+				client_id: jwtUser.client_id as string
 			} satisfies JwtData;
 
 			return sessionUser;
@@ -135,4 +135,5 @@ const updateTodos = async (encrypted_todos: string, id: string): Promise<void> =
 	}
 };
 
-export { getTodos, updateTodos, createUser, getUserByCookies, findUser };
+export { createUser, findUser, getTodos, getUserByCookies, updateTodos };
+
