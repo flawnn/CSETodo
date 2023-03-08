@@ -37,7 +37,6 @@
 			class="rounded-full"
 			alt="avatar"
 		/>
-		<div id="login-indicator" class="bg-red-500 absolute top-0 right-0 w-4 h-4 rounded-full" />
 		{#if show}
 			<div
 				in:scale={{ duration: 100, start: 0.95 }}

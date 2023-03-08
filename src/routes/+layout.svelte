@@ -7,6 +7,7 @@
 	export let data: LayoutData;
 
 	onMount(() => {
+		// Checks for data requirements to proceed
 		if (
 			(localStorage.getItem('dek') == undefined ||
 				localStorage.getItem('public_key') == undefined) &&
@@ -20,7 +21,7 @@
 					.replace(/^ +/, '')
 					.replace(/=.*/, '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;');
 			});
-			
+
 			location.reload();
 		}
 	});
@@ -35,5 +36,5 @@
 	/>
 </svelte:head>
 
-<SvelteToast options={{ pausable: true, duration: 10000 }} />
+<SvelteToast options={{ pausable: true, duration: 8000, dismissable: true }} />
 <slot />

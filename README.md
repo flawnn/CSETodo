@@ -3,8 +3,8 @@
 This is a simple, client-side encrypted todo web app, inspired by TodoMVC, and supported by SvelteKit.
 It has basic CRUD abilites, meaning you can create, view, update and delete your todos.
 
-Authentication runs over RSA, specifically being in knowledge of the respective private key, which is generated for you when creating a new user on the webpage. Only that private key allows you to access your data later on other devices (or if you reset your browser data). 
- 
+Authentication runs over RSA, specifically being in knowledge of the respective private key, which is generated for you when creating a new user on the webpage. Only that private key allows you to access your data later on other devices (or if you reset your browser data).
+
 A live demo can be found [here](https://cse-todo.vercel.app) (hosted on Vercel).
 
 ### Application Architecture
@@ -26,7 +26,7 @@ git clone https://github.com/flawnn/E2EETodo.git
 
 2. Set the needed environment variables in `.env`, as following (see `.env.example`)
 
-```json
+```env
 DATABASE_URL="..."
 JWT_SECRET="..."
 ```

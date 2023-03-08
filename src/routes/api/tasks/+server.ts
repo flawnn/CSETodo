@@ -11,7 +11,7 @@ export const POST = (async ({ params, url, request, locals }) => {
         throw error(500)
 			}
 
-  return new Response(String("GG"));
+  return new Response(String("1"));
 }) satisfies RequestHandler;
 
 
