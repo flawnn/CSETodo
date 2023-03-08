@@ -9,7 +9,11 @@ A live demo can be found [here](https://cse-todo.vercel.app) (hosted on Vercel).
 
 ### Application Architecture
 
-The rough application architecture can be seen on [this](https://drive.google.com/file/d/1PMfS435HpT5ICBRcgiRqN9r_kv8vFhAE/view?usp=sharing) collection of diagrams. The application uses MongoDB as a backend database, although you could also use every other database supported by [Prisma](https://www.prisma.io/docs/getting-started#prisma-with-different-tooling).
+The rough application architecture can be seen on [this](https://drive.google.com/file/d/1PMfS435HpT5ICBRcgiRqN9r_kv8vFhAE/view?usp=sharing) collection of diagrams (or on the below image).
+
+![image](./docs/diagrams.png)
+
+The application uses MongoDB as a backend database, although you could also use every other database supported by [Prisma](https://www.prisma.io/docs/getting-started#prisma-with-different-tooling).
 
 The most demanding part here was solving all the authentication/cryptography on the browser side, like generating the public key from the private key, generating a key pair as a whole etc.
 For this, the frontend utilizes [forge](https://github.com/digitalbazaar/forge), a native implementation of many cryptographic tools.
