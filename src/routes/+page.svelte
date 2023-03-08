@@ -35,7 +35,15 @@
 
 		// Show private key on root page reload
 		if (window.location.search == '' && sessionStorage.getItem('private_key') != null) {
-			toast.push(sessionStorage.getItem('private_key')!);
+			toast.push(
+				'SAVE this private key! It is to authenticate yourself if you change devices. This is the only time you will be able to save it'
+			);
+			toast.push(sessionStorage.getItem('private_key')!, {
+				theme: {
+					'font-family': 'Space Mono',
+					'font-size': '12px'
+				}
+			});
 
 			sessionStorage.removeItem('private_key');
 		}

@@ -25,7 +25,6 @@
 		.publicKeyFromPem(Base64.decode(localStorage.getItem('public_key') as string))
 		.n.toString(16);
 
-	// computed
 	$: todosAmount = todos.length;
 	$: incompleteTodos = todos.filter((todo) => !todo.completed).length;
 	$: filteredTodos = filterTodos(todos, selectedFilter);
@@ -100,7 +99,8 @@
 		todos = todos.filter((todo) => todo.id !== id);
 	}
 
-	function editTodo(id: string, newTodo: string): void {
+	async function editTodo(id: string, newTodo: string) {
+		await fetchTodos();
 		let currentTodo = todos.findIndex((todo) => todo.id === id);
 		todos[currentTodo].text = newTodo;
 	}
