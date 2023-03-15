@@ -35,31 +35,30 @@ function encryptTodos(dek: string, todos: Todos[]): string {
     return Base64.encode(cipher.output.toHex());
 }
 
-/**
- * TODO: This actually doesn't work as it is supposed to be. For one, deleted and modified todos are not reflected,
- * and due to Prisma, using the app simultaneously on two devices, breaks the app and lets the server crash. 
- * Refreshing while using the app would need a massive Refactor of the way we interact with the database and logic
- *  */ 
-/* 
-async function updateTodosFromServer(todos: Todos[], dek: string): Promise<Todos[]> {
-    let res = await (await fetch('/api/tasks', {
-				method: 'GET',
-                credentials: "same-origin",
-    })).text();
+// /**
+//  * TODO: This actually doesn't work as it is supposed to be. For one, deleted and modified todos are not reflected,
+//  * and due to Prisma, using the app simultaneously on two devices, breaks the app and lets the server crash. 
+//  * Refreshing while using the app would need a massive Refactor of the way we interact with the database and logic
+//  *  */ 
+// async function updateTodosFromServer(todos: Todos[], dek: string): Promise<Todos[]> {
+//     let res = await (await fetch('/api/tasks', {
+// 				method: 'GET',
+//                 credentials: "same-origin",
+//     })).text();
 
-    let decrypted = decryptTodos(dek, res);
+//     let decrypted = decryptTodos(dek, res);
 
-    for(let todo of decrypted) {
-        let counterpart = todos.some(x => x.id == todo.id)
+//     for(let todo of decrypted) {
+//         let counterpart = todos.some(x => x.id == todo.id)
 
-        if(!counterpart) {
-            todos.push(todo)
-        }
-    }
+//         if(!counterpart) {
+//             todos.push(todo)
+//         }
+//     }
 
-    return todos;
-}
-*/
+//     return todos;
+// }
+
 
 function getDefaultCookieOptions(): Object{
     return {
