@@ -69,5 +69,5 @@ function getDefaultCookieOptions(): Object{
             maxAge: 60 * 60 * 24 * 30 * 120
         }
 }
-export { decryptTodos, encryptTodos, getDefaultCookieOptions, getPublicKeyFromPrivateKey};
+export { decryptTodos, encryptTodos, getDefaultCookieOptions, getPublicKeyFromPrivateKey };
 

@@ -45,7 +45,6 @@
 				credentials: 'same-origin'
 			});
 
-			console.log(await res.text());
 			if (res.status == 500) {
 				toast.push('Error while updating Todos. Try adding another one or reload page.');
 			}
