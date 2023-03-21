@@ -15,7 +15,7 @@ jobs:
       - name: Get Deps
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       - name: Cypress run
