@@ -8,6 +8,11 @@ jobs:
     env:
       JWT_SECRET: ${{ secrets.JWT_SECRET }} 
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      CYPRESS_CLIENT_ID: ${{ secrets.CYPRESS_CLIENT_ID }}
+      CYPRESS_DEK: ${{ secrets.CYPRESS_DEK }}
+      CYPRESS_PUBLIC_KEY: ${{ secrets.CYPRESS_PUBLIC_KEY }}
+      CYPRESS_SESSIONTOKEN: ${{ secrets.CYPRESS_SESSIONTOKEN }}
+      CYPRESS_TEST_TOKEN_PAIR: ${{ secrets.CYPRESS_SESSIONTOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -21,6 +26,8 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
+      - name: Rename Cypress Config 
+        run: mv cypress.config.ts.example cypress.config.ts
       - name: Cypress run
         uses: cypress-io/github-action@v5.5.1
         with:

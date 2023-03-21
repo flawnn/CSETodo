@@ -48,12 +48,10 @@ describe('Main Page (unauthenticated)', () => {
 
 	it('Log-in', () => {
 		cy.visit('/');
-
-		let testtokens = Cypress.env("test_token_pair")
 		cy.contains('button', "Login").click()
 
 		cy.get('textarea').then(textArea => {
-      		textArea.text(testtokens["private_key"]);
+      		textArea.text(Cypress.env("private_key"));
 		});
 
 		cy.contains('button', "Login").click()
