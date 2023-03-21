@@ -8,11 +8,11 @@ jobs:
     env:
       JWT_SECRET: ${{ secrets.JWT_SECRET }} 
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      CYPRESS_CLIENT_ID: ${{ secrets.CYPRESS_CLIENT_ID }}
-      CYPRESS_DEK: ${{ secrets.CYPRESS_DEK }}
-      CYPRESS_PUBLIC_KEY: ${{ secrets.CYPRESS_PUBLIC_KEY }}
-      CYPRESS_SESSIONTOKEN: ${{ secrets.CYPRESS_SESSIONTOKEN }}
-      CYPRESS_TEST_TOKEN_PAIR: ${{ secrets.CYPRESS_SESSIONTOKEN }}
+      CYPRESS_client_id: ${{ secrets.CYPRESS_CLIENT_ID }}
+      CYPRESS_dek: ${{ secrets.CYPRESS_DEK }}
+      CYPRESS_public_key: ${{ secrets.CYPRESS_PUBLIC_KEY }}
+      CYPRESS_sessiontoken: ${{ secrets.CYPRESS_SESSIONTOKEN }}
+      CYPRESS_private_key: ${{ secrets.CYPRESS_PRIVATE_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
