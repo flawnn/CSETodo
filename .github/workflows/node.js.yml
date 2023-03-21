@@ -8,8 +8,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
+      - name: PNPM Setup
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6.32.9
+      - name: Get Deps
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
       - name: Cypress run
         uses: cypress-io/github-action@v5.5.1
         with:
