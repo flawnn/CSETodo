@@ -9,8 +9,6 @@ import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
 import forge from "node-forge";
 
-
-
 export const POST = (async ({ request, cookies }) => {
     try{
         let body = await request.json();
