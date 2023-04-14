@@ -1,11 +1,13 @@
 import { JWT_SECRET } from '$env/static/private';
 import { encryptTodos } from '$root/lib/util';
-import { db } from '$root/database/db';
+import { database } from '$root/database/db';
 import type { users } from '@prisma/client';
 import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
 import forge from "node-forge";
 import type { JwtData } from './../types/JwtData';
+
+const db = database.getDb();
 
 const createUser = async (session_id: string, dek: string, publicKey: forge.pki.rsa.PublicKey) => {
 	let public_key_pem = forge.pki.publicKeyToPem(publicKey);
