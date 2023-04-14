@@ -1,6 +1,6 @@
 import { JWT_SECRET } from '$env/static/private';
 import { encryptTodos } from '$root/lib/util';
-import { db } from '$root/services/db';
+import { db } from '$root/database/db';
 import type { users } from '@prisma/client';
 import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';

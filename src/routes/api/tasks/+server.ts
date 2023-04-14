@@ -5,7 +5,7 @@ import { error, type RequestHandler } from "@sveltejs/kit";
 export const POST = (async ({ params, url, request, locals }) => {
   let todos: string = await request.text();
 
-  if(todos.length == 0){
+  if(todos.length != 0){
     try {
       updateTodos(todos, locals.user.id);
     } catch (e) {
