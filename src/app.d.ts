@@ -5,20 +5,19 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user: JwtData
+			user: JwtData;
 		}
 		interface PageData {
-			user: JwtData | undefined
+			user: JwtData | undefined;
 		}
 		// interface Platform {}
 	}
 
 	namespace svelte.JSX {
 		interface HTMLAttributes<T> {
-			onclick_outside: () => void
+			onclick_outside: () => void;
 		}
 	}
 }
 
-export { };
-
+export {};

@@ -1,10 +1,10 @@
 import { JWT_SECRET } from '$env/static/private';
-import { encryptTodos } from '$root/lib/util';
 import { database } from '$root/database/db';
+import { encryptTodos } from '$root/lib/util';
 import type { users } from '@prisma/client';
 import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
-import forge from "node-forge";
+import forge from 'node-forge';
 import type { JwtData } from './../types/JwtData';
 
 const db = database.getDb();
@@ -138,4 +138,3 @@ const updateTodos = async (encrypted_todos: string, id: string): Promise<void> =
 };
 
 export { createUser, findUser, getTodos, getUserByCookies, updateTodos };
-

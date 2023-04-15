@@ -3,88 +3,88 @@
 *,
 *::before,
 *::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 :root {
-    font-family: 'Source Sans Pro', sans-serif;
+	font-family: 'Source Sans Pro', sans-serif;
 
-    --color-bg: hsl(220, 20%, 14%);
-    --color-text: hsl(0, 0%, 2%);
-    --color-title: hsl(357, 49%, 48%);
-    --color-highlight: hsl(0, 33%, 64%);
-    --color-gray-28: hsl(0, 0%, 28%);
-    --color-gray-58: hsl(0, 0%, 58%);
-    --color-gray-90: hsl(0, 0%, 90%);
+	--color-bg: hsl(220, 20%, 14%);
+	--color-text: hsl(0, 0%, 2%);
+	--color-title: hsl(357, 49%, 48%);
+	--color-highlight: hsl(0, 33%, 64%);
+	--color-gray-28: hsl(0, 0%, 28%);
+	--color-gray-58: hsl(0, 0%, 58%);
+	--color-gray-90: hsl(0, 0%, 90%);
 
-    --font-24: 1.5rem;
-    --font-32: 2rem;
-    --font-80: 5rem;
+	--font-24: 1.5rem;
+	--font-32: 2rem;
+	--font-80: 5rem;
 
-    --spacing-4: 0.25rem;
-    --spacing-8: 0.5rem;
-    --spacing-16: 1rem;
+	--spacing-4: 0.25rem;
+	--spacing-8: 0.5rem;
+	--spacing-16: 1rem;
 
-    --shadow-1: hsl(0, 0%, 0%, 0.1);
+	--shadow-1: hsl(0, 0%, 0%, 0.1);
 
-    --radius-base: 20px;
-    --radius-shadow: 20px
+	--radius-base: 20px;
+	--radius-shadow: 20px;
 }
 
 html,
 body {
-    height: 100%;
+	height: 100%;
 }
 
 body {
-    font-family: var(--sans-serif);
-    font-weight: 300;
-    line-height: 1.4;
-    color: var(--color-text);
-    background-color: var(--color-bg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    transition: opacity 0.75s;
-    transition: background-color 1s;
-    transition: background-image 1s;
-    background-color: rgba(0, 0, 0, 0.547);
-    background-blend-mode: darken;
+	font-family: var(--sans-serif);
+	font-weight: 300;
+	line-height: 1.4;
+	color: var(--color-text);
+	background-color: var(--color-bg);
+	background-size: cover;
+	background-repeat: no-repeat;
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+	transition: opacity 0.75s;
+	transition: background-color 1s;
+	transition: background-image 1s;
+	background-color: rgba(0, 0, 0, 0.547);
+	background-blend-mode: darken;
 }
 
 .todos-container {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
 }
 
 label,
 input,
 button {
-    font-family: inherit;
-    font-weight: inherit;
-    line-height: inherit;
-    color: inherit;
+	font-family: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+	color: inherit;
 }
 
 button {
-    background: none;
-    border: 0;
-    cursor: pointer;
+	background: none;
+	border: 0;
+	cursor: pointer;
 }
 
 .hidden {
-    visibility: hidden;
+	visibility: hidden;
 }
 
 :focus,
-.toggle:focus+label,
-.toggle-all:focus+label {
-    box-shadow: 0 0 2px 2px var(--color-highlight);
-    outline: 0;
+.toggle:focus + label,
+.toggle-all:focus + label {
+	box-shadow: 0 0 2px 2px var(--color-highlight);
+	outline: 0;
 }

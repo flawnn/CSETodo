@@ -1,4 +1,4 @@
 export type JwtData = {
-    id: string;
-    client_id: string;
-}
+	id: string;
+	client_id: string;
+};

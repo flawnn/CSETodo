@@ -1,3 +1,3 @@
 export const testConfig = {
-    testingJwtSecret: "testing"
-}
+	testingJwtSecret: 'testing'
+};
