@@ -6,7 +6,6 @@
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
 		"resolveJsonModule": true,
-		"types": ["vitest/globals"],
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"baseUrl": ".",

@@ -1,21 +1,22 @@
 import { PrismaClient } from '@prisma/client';
-const { MongoMemoryServer } = require('mongodb-memory-server');
+import { MongoMemoryReplSet } from 'mongodb-memory-server';
+import { testUser } from './fixtures/test_user';
 
 const COLLECTIONS = ['users'];
 
 class DBManager {
-	db: any;
 	server: any;
-	connection: any;
+	connection: Partial<PrismaClient | null>;
 
 	constructor() {
-		this.db = null;
-		this.server = new MongoMemoryServer();
+		this.server = null;
 		this.connection = null;
 	}
 
 	async start() {
-		const url = await this.server.getUri();
+		this.server = await MongoMemoryReplSet.create({ replSet: { storageEngine: 'wiredTiger' } });
+		const url = (this.server as MongoMemoryReplSet).getUri('todoApp');
+
 		this.connection = new PrismaClient({
 			datasources: {
 				db: {
@@ -24,16 +25,25 @@ class DBManager {
 			}
 		});
 
-		// this.db = this.connection.db(await this.server.getDbName());
+		// Insert new user
+		await this.connection.users?.create({
+			data: { ...testUser }
+		});
 	}
 
 	stop() {
-		this.connection.close();
+		this.connection?.$disconnect!();
 		return this.server.stop();
 	}
 
-	cleanup() {
-		return Promise.all(COLLECTIONS.map((c) => this.db.collection(c).remove({})));
+	async cleanup() {
+		// Delete all user data from users
+		await Promise.all(COLLECTIONS.map((c) => this.connection?.users?.deleteMany({ where: {} })));
+
+		// Insert new user
+		await this.connection!.users?.create({
+			data: { ...testUser }
+		});
 	}
 }
 
