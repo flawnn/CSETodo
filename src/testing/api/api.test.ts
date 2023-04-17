@@ -1,12 +1,16 @@
-import request from 'supertest';
+import type { PrismaClient, users } from '@prisma/client';
 import { afterAll, afterEach, assert, beforeAll, describe, it, vi, type Mock } from 'vitest';
-import { database as applicationDB } from '../../database/db';
+import createFetchMock from 'vitest-fetch-mock';
 import { DBManager } from '../db_manager';
 import { testConfig } from '../fixtures/test_config';
 import { testUser } from '../fixtures/test_user';
-import { testCredentials } from './../fixtures/test_credentials';
 
 const testDBManager = new DBManager();
+
+// MOCKS
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+fetchMocker.dontMock();
 
 vi.mock('../../database/db', () => {
 	return {
@@ -22,13 +26,22 @@ vi.mock('$env/static/private', () => {
 	};
 });
 
+// Test-related imports (due to need of manual hoisting down here)
+import { GET, POST } from '$root/routes/api/tasks/+server';
+import { database as applicationDB } from '../../database/db';
+import { createRequestEvent } from '../util';
+
+// TESTS
 describe('/api/tasks endpoint', () => {
 	// Test database related stuff
 	beforeAll(async () => {
 		await testDBManager.start();
-		(applicationDB.getDb as Mock).mockImplementation(() => testDBManager.connection);
+		(applicationDB.getDb as Mock).mockImplementation(
+			() => testDBManager.connection as PrismaClient
+		);
 	});
 
+	// Clean & reset database to fixture state; Fix all mocks
 	afterEach(() => {
 		testDBManager.cleanup() as any;
 		vi.restoreAllMocks();
@@ -37,26 +50,29 @@ describe('/api/tasks endpoint', () => {
 	afterAll(() => testDBManager.stop());
 
 	it('returns encrypted tasks via GET', async () => {
-		let user = await testDBManager.connection?.users?.findFirst({
+		let user = (await testDBManager.connection?.users?.findFirst({
 			where: {
 				public_key: testUser.public_key
 			}
-		});
+		})) as users;
 
-		request('http://localhost:5173/api')
-			.get('/tasks')
-			.set(
-				'Cookie',
-				Object.entries(testCredentials.cookies).reduce(
-					(p, v) => (p += v[0] + '=' + v[1] + '; '),
-					''
-				)
-			)
-			.expect(200)
-			.then((res) => {
-				assert(res.body, user?.todos);
-			});
+		let res = await GET(createRequestEvent('/api/tasks', 'GET'));
+
+		assert.isTrue(res.status == 200);
+		assert.equal(await res.text(), user?.todos);
 	});
 
-	it('updates todos via POST', () => {});
+	it('updates todos via POST', async () => {
+		let res = await POST(createRequestEvent('/api/tasks', 'POST', 'TEST'));
+
+		let user = (await testDBManager.connection?.users?.findFirst({
+			where: {
+				public_key: testUser.public_key
+			}
+		})) as users;
+
+		assert.isTrue(res.status == 200);
+		assert.equal(await res.text(), '1');
+		assert.equal(user.todos, 'TEST');
+	});
 });
