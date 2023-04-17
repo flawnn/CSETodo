@@ -10,7 +10,8 @@ export const POST = (async ({ request, locals }) => {
 		try {
 			await userController.updateTodos(todos, locals.user.id);
 		} catch (e) {
-			throw error(500);
+			// Might be a unsafe practice but for debugging purposes
+			throw error(500, e as string);
 		}
 	} else {
 		throw error(400, 'Empty body');
