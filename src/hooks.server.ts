@@ -2,12 +2,12 @@ import { error, type Handle } from '@sveltejs/kit';
 import { parse } from 'cookie';
 import { v4 as uuidv4 } from 'uuid';
 import { getDefaultCookieOptions } from './lib/util';
-import { getUserByCookies } from './services/users';
+import { UserController } from './services/users';
 
 export const handle: Handle = (async ({ event, resolve }) => {
 	const { headers } = event.request;
 	const cookies = parse(headers.get('cookie') ?? '');
-	let jwtUser = await getUserByCookies(cookies);
+	let jwtUser = await UserController.getInstance().getUserByCookies(cookies);
 
 	if (
 		jwtUser == null &&
