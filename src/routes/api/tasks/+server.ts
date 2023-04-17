@@ -8,7 +8,7 @@ export const POST = (async ({ request, locals }) => {
 
 	if (todos.length != 0) {
 		try {
-			userController.updateTodos(todos, locals.user.id);
+			await userController.updateTodos(todos, locals.user.id);
 		} catch (e) {
 			throw error(500);
 		}
