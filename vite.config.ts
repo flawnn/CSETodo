@@ -5,8 +5,8 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [sveltekit()],
 	resolve: {
-    alias: {
-      $root: path.resolve('./src'),
-    },
-  },
+		alias: {
+			$root: path.resolve('./src')
+		}
+	}
 });
