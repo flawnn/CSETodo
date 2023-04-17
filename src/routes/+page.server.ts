@@ -1,5 +1,5 @@
 import { getDefaultCookieOptions } from '$root/lib/util';
-import { createUser } from '$root/services/users';
+import { UserController } from '$root/services/users';
 import { Base64 } from 'js-base64';
 import forge from 'node-forge';
 import type { Actions } from './../../.svelte-kit/types/src/routes/$types.d';
@@ -17,7 +17,7 @@ export const actions = {
 		const key_pair = forge.pki.rsa.generateKeyPair({ bits: 2048 });
 		const public_key = forge.pki.publicKeyToPem(key_pair.publicKey);
 
-		let res = await createUser(client_id, dek, key_pair.publicKey);
+		let res = await UserController.getInstance().createUser(client_id, dek, key_pair.publicKey);
 
 		if (res.error ?? false) {
 			return res;
