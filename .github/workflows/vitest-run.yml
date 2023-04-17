@@ -1,0 +1,20 @@
+on: [push]
+
+jobs:
+  vitest-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: PNPM Setup
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6.32.9
+      - name: Get Deps
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - name: Run tests
+        run: npx vitest
