@@ -5,8 +5,6 @@ import { DBManager } from '../db_manager';
 import { testConfig } from '../fixtures/test_config';
 import { testUser } from '../fixtures/test_user';
 
-const testDBManager = new DBManager();
-
 // MOCKS
 const fetchMocker = createFetchMock(vi);
 fetchMocker.enableMocks();
@@ -31,9 +29,12 @@ import { GET, POST } from '$root/routes/api/tasks/+server';
 import { database as applicationDB } from '../../database/db';
 import { createRequestEvent } from '../util';
 
-// TESTS
 describe('/api/tasks endpoint', () => {
-	// Test database related stuff
+	const testDBManager = new DBManager();
+
+	/**
+	 * Setup
+	 */
 	beforeAll(async () => {
 		await testDBManager.start();
 		(applicationDB.getDb as Mock).mockImplementation(
@@ -41,7 +42,6 @@ describe('/api/tasks endpoint', () => {
 		);
 	});
 
-	// Clean & reset database to fixture state; Fix all mocks
 	afterEach(() => {
 		testDBManager.cleanup() as any;
 		vi.restoreAllMocks();
@@ -49,6 +49,9 @@ describe('/api/tasks endpoint', () => {
 
 	afterAll(() => testDBManager.stop());
 
+	/**
+	 * Tests
+	 */
 	it('returns encrypted tasks via GET', async () => {
 		let user = (await testDBManager.connection?.users?.findFirst({
 			where: {
