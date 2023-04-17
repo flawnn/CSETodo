@@ -42,8 +42,8 @@ describe('/api/tasks endpoint', () => {
 		);
 	});
 
-	afterEach(() => {
-		testDBManager.cleanup() as any;
+	afterEach(async () => {
+		(await testDBManager.cleanup()) as any;
 		vi.restoreAllMocks();
 	});
 
