@@ -14,10 +14,6 @@
 	// Component State
 	let editing = false;
 
-	function toggleEdit(): void {
-		editing = true;
-	}
-
 	async function handleEdit(event: KeyboardEvent, id: string) {
 		let pressedKey = event.key;
 		let targetElement = event.target as HTMLInputElement;
@@ -56,7 +52,7 @@
 			/>
 			<label aria-label="Check todo" class="todo-check" for="todo" />
 		</div>
-		<span on:dblclick={toggleEdit} class:completed={todo.completed} class="todo-text"
+		<span on:dblclick={() => editing = true} class:completed={todo.completed} class="todo-text"
 			>{todo.text}</span
 		>
 		<button aria-label="Remove todo" on:click={async () => await removeTodo(all_todos, todo.id)} class="remove" />
