@@ -55,7 +55,7 @@
 		<span on:dblclick={() => editing = true} class:completed={todo.completed} class="todo-text"
 			>{todo.text}</span
 		>
-		<button aria-label="Remove todo" on:click={async () => await removeTodo(all_todos, todo.id)} class="remove" />
+		<button aria-label="Remove todo" on:click={async () => all_todos = await removeTodo(all_todos, todo.id)} class="remove" />
 	</div>
 
 	{#if editing}
