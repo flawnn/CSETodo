@@ -1,8 +1,26 @@
+import { database as applicationDB } from '$root/database/db';
+import type { PrismaClient } from '@prisma/client';
 import { error, type Handle } from '@sveltejs/kit';
 import { parse } from 'cookie';
 import { v4 as uuidv4 } from 'uuid';
+import { vi, type Mock } from 'vitest';
 import { getDefaultCookieOptions } from './lib/util';
 import { UserController } from './services/users';
+import { DBManager } from './testing/db_manager';
+
+if (process.execArgv.find((x) => x.includes('e2e'))) {
+	const testDBManager = new DBManager();
+
+	vi.mock('./database/db', () => {
+		return {
+			database: {
+				getDb: vi.fn()
+			}
+		};
+	});
+
+	(applicationDB.getDb as Mock).mockImplementation(() => testDBManager.connection as PrismaClient);
+}
 
 export const handle: Handle = (async ({ event, resolve }) => {
 	const { headers } = event.request;

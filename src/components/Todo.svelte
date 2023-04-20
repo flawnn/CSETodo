@@ -1,8 +1,6 @@
-<script lang="ts">
-	import { encryptTodos } from '$root/lib/util';
-	import '$root/styles/todos.css';
+<script lang="ts"> 
+	import '$root/components/styles/Todo.css';
 	import type { FiltersType, Todos } from '$root/types/Todo';
-	import { toast } from '@zerodevx/svelte-toast';
 	import { Base64 } from 'js-base64';
 	import forge from 'node-forge';
 	import { fade } from 'svelte/transition';
@@ -10,119 +8,35 @@
 	import AddTodo from './AddTodo.svelte';
 	import Avatar from './Avatar.svelte';
 	import TodoElement from './TodoElement.svelte';
+	import { pushTasksToDB } from './data/api_handler';
+	import { addTodo, clearCompleted, completeTodo, editTodo, filterTodos, removeTodo, toggleCompleted } from './utils/todos';
 
+	// Global Variables
+	let filters = ['all', 'active', 'completed'];
+		
+	// Component Props
 	export let initialTodos: Todos[];
 
 	export let data: PageData;
 
+	// Component State
 	let selectedFilter: FiltersType = 'all';
-
 	let todos = initialTodos.map((a) => {
 		return { ...a };
 	});
-
 	let public_key = forge.pki
 		.publicKeyFromPem(Base64.decode(localStorage.getItem('public_key') as string))
 		.n.toString(16);
 
+	// Reactive Assignments
 	$: todosAmount = todos.length;
 	$: incompleteTodos = todos.filter((todo) => !todo.completed).length;
 	$: filteredTodos = filterTodos(todos, selectedFilter);
 	$: completedTodos = todos.filter((todo) => todo.completed).length;
-	$: pushTasksToDB(todos);
-
-	async function pushTasksToDB(newTodos: Todos[]) {
-		if (newTodos != initialTodos) {
-			let encrypted = encryptTodos(Base64.decode(localStorage.getItem('dek')!), newTodos);
-
-			let res = await fetch('/api/tasks', {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: encrypted,
-				credentials: 'same-origin'
-			});
-
-			if (res.status == 500) {
-				toast.push('Error while updating Todos. Try adding another one or reload page.');
-			}
-		}
-	}
-
-	function generateRandomId(): string {
-		return Math.random().toString(16).slice(2);
-	}
-
-	async function fetchTodos() {
-		// TODO: Implement
-		/* await updateTodosFromServer(initialTodos, Base64.decode(localStorage.getItem('dek')!));
-
-		todos = initialTodos; */
-	}
-
-	async function addTodo(todo: string) {
-		await fetchTodos();
-
-		let newTodo: Todos = {
-			id: generateRandomId(),
-			text: todo,
-			completed: false
-		};
-		todos = [...todos, newTodo];
-	}
-
-	async function toggleCompleted(event: MouseEvent) {
-		await fetchTodos();
-		let { checked } = event.target as HTMLInputElement;
-
-		todos = todos.map((todo) => ({
-			...todo,
-			completed: checked
-		}));
-	}
-
-	async function completeTodo(id: string) {
-		await fetchTodos();
-		todos = todos.map((todo) => {
-			if (todo.id === id) {
-				todo.completed = !todo.completed;
-			}
-			return todo;
-		});
-	}
-
-	async function removeTodo(id: string) {
-		await fetchTodos();
-		todos = todos.filter((todo) => todo.id !== id);
-	}
-
-	async function editTodo(id: string, newTodo: string) {
-		await fetchTodos();
-		let currentTodo = todos.findIndex((todo) => todo.id === id);
-		todos[currentTodo].text = newTodo;
-	}
+	$: pushTasksToDB(initialTodos, todos);
 
 	function setFilter(newFilter: any): void {
 		selectedFilter = newFilter;
-	}
-
-	function filterTodos(todos: Todos[], filter: any): Todos[] {
-		switch (filter) {
-			default:
-				return todos;
-			case 'active':
-				return todos.filter((todo) => !todo.completed);
-			case 'completed':
-				return todos.filter((todo) => todo.completed);
-		}
-	}
-
-	let filters = ['all', 'active', 'completed'];
-
-	function clearCompleted(): void {
-		todos = todos.filter((todo) => todo.completed !== true);
 	}
 </script>
 
@@ -137,11 +51,11 @@
 	<div class="todos-container">
 		<h1 class="title">to-dos 🚧</h1>
 		<div class="todos">
-			<AddTodo {addTodo} {toggleCompleted} {todosAmount} />
+			<AddTodo bind:all_todos={todos} {addTodo} {toggleCompleted} {todosAmount} />
 			{#if todosAmount}
 				<ul class="todo-list">
 					{#each filteredTodos as todo (todo.id)}
-						<TodoElement {removeTodo} {completeTodo} {todo} {editTodo} />
+						<TodoElement bind:all_todos={todos} {removeTodo} {completeTodo} {todo} {editTodo} />
 					{/each}
 				</ul>
 
@@ -162,7 +76,7 @@
 						{/each}
 					</div>
 					<button
-						on:click={clearCompleted}
+						on:click={() => todos = clearCompleted(todos)}
 						class:hidden={completedTodos === 0}
 						class="clear-completed">Clear completed</button
 					>

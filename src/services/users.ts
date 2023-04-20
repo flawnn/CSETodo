@@ -1,11 +1,11 @@
 import { JWT_SECRET } from '$env/static/private';
 import { database } from '$root/database/db';
-import { encryptTodos } from '$root/lib/util';
 import type { PrismaClient, users } from '@prisma/client';
 import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
 import forge from 'node-forge';
 import type { JwtData } from './../types/JwtData';
+import { encryptTodos } from '$root/lib/encryption/util';
 export class UserController {
 	private static instance: UserController;
 

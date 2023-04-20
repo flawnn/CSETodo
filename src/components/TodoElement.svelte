@@ -2,23 +2,23 @@
 	import type { Todos } from '$root/types/Todo';
 	import { quintOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
+	import type { CompleteTodoType, EditTodoType, RemoveTodoType } from './types/TodoElement';
 
-	type CompleteTodoType = (id: string) => void;
-	type RemoveTodoType = (id: string) => void;
-	type EditTodoType = (id: string, newTodo: string) => void;
-
+	// Component Exports
+	export let all_todos: Todos[];
 	export let todo: Todos;
 	export let completeTodo: CompleteTodoType;
 	export let removeTodo: RemoveTodoType;
 	export let editTodo: EditTodoType;
 
+	// Component State
 	let editing = false;
 
 	function toggleEdit(): void {
 		editing = true;
 	}
 
-	function handleEdit(event: KeyboardEvent, id: string): void {
+	async function handleEdit(event: KeyboardEvent, id: string) {
 		let pressedKey = event.key;
 		let targetElement = event.target as HTMLInputElement;
 		let newTodo = targetElement.value;
@@ -28,17 +28,17 @@
 				targetElement.blur();
 				break;
 			case 'Enter':
-				editTodo(id, newTodo);
+				all_todos = await editTodo(all_todos, id, newTodo);
 				targetElement.blur();
 				break;
 		}
 	}
 
-	function handleBlur(event: FocusEvent, id: string): void {
+	async function handleBlur(event: FocusEvent, id: string){
 		let targetElement = event.target as HTMLInputElement;
 		let newTodo = targetElement.value;
 
-		editTodo(id, newTodo);
+		all_todos = await editTodo(all_todos, id, newTodo);
 		targetElement.blur();
 		editing = false;
 	}
@@ -48,7 +48,7 @@
 	<div class="todo-item">
 		<div>
 			<input
-				on:change={() => completeTodo(todo.id)}
+				on:change={async () => all_todos = await completeTodo(all_todos, todo.id)}
 				checked={todo.completed}
 				id="todo"
 				class="toggle"
@@ -59,7 +59,7 @@
 		<span on:dblclick={toggleEdit} class:completed={todo.completed} class="todo-text"
 			>{todo.text}</span
 		>
-		<button aria-label="Remove todo" on:click={() => removeTodo(todo.id)} class="remove" />
+		<button aria-label="Remove todo" on:click={async () => await removeTodo(all_todos, todo.id)} class="remove" />
 	</div>
 
 	{#if editing}
