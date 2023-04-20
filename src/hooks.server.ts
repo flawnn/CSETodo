@@ -8,20 +8,6 @@ import { getDefaultCookieOptions } from './lib/util';
 import { UserController } from './services/users';
 import { DBManager } from './testing/db_manager';
 
-if (process.execArgv.find((x) => x.includes('e2e'))) {
-	const testDBManager = new DBManager();
-
-	vi.mock('./database/db', () => {
-		return {
-			database: {
-				getDb: vi.fn()
-			}
-		};
-	});
-
-	(applicationDB.getDb as Mock).mockImplementation(() => testDBManager.connection as PrismaClient);
-}
-
 export const handle: Handle = (async ({ event, resolve }) => {
 	const { headers } = event.request;
 	const cookies = parse(headers.get('cookie') ?? '');
