@@ -2,7 +2,6 @@
 	import Todo from '$root/components/Todo.svelte';
 	import { clickOutside } from '$root/lib/click_outside';
 	import { decryptTodos, getPublicKeyFromPrivateKey } from '$root/lib/encryption/util';
-	import '$root/styles/global.css';
 	import type { Todos } from '$root/types/Todo';
 	import type { sanitizedUser } from '$root/types/User';
 	import { toast } from '@zerodevx/svelte-toast';
