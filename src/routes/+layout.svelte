@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { isUserDataInteger } from '$root/lib/util';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import { onMount } from 'svelte';
 	import '../app.css';
@@ -7,15 +8,10 @@
 	export let data: LayoutData;
 
 	onMount(() => {
-		// Checks for data requirements to proceed
-		if (
-			(localStorage.getItem('dek') == undefined ||
-				localStorage.getItem('public_key') == undefined) &&
-			data.user != null
-		) {
+		// Checks if there is any data missing and if yes, resets cookies & localStorage and then reloads
+		if (isUserDataInteger(localStorage, data)) {
 			localStorage.clear();
 
-			// Clearing cookies
 			document.cookie.split(';').forEach(function (c) {
 				document.cookie = c
 					.replace(/^ +/, '')

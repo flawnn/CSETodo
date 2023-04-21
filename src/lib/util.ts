@@ -1,15 +1,14 @@
+import type { LayoutData } from '../routes/$types';
+
 function generateRandomId(): string {
 	return Math.random().toString(16).slice(2);
 }
 
-function getDefaultCookieOptions(): Object {
-	return {
-		path: '/',
-		httpOnly: false,
-		sameSite: 'strict',
-		secure: false,
-		maxAge: 60 * 60 * 24 * 30 * 120
-	};
+function isUserDataInteger(localstorage: Storage, data: LayoutData): boolean {
+	return (
+		(localStorage.getItem('dek') == undefined || localStorage.getItem('public_key') == undefined) &&
+		data.user != null
+	);
 }
 
 // /**
@@ -37,7 +36,4 @@ function getDefaultCookieOptions(): Object {
 //     return todos;
 // }
 
-export {
-	generateRandomId,
-	getDefaultCookieOptions,
-};
+export { generateRandomId, isUserDataInteger };

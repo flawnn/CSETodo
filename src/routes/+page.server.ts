@@ -1,8 +1,8 @@
-import { getDefaultCookieOptions } from '$root/lib/util';
+import { Config } from '$root/config';
 import { UserController } from '$root/services/users';
 import { Base64 } from 'js-base64';
 import forge from 'node-forge';
-import type { Actions } from './../../.svelte-kit/types/src/routes/$types.d';
+import type { ActionData, Actions } from './../../.svelte-kit/types/src/routes/$types.d';
 
 export const actions = {
 	/**
@@ -20,16 +20,19 @@ export const actions = {
 		let res = await UserController.getInstance().createUser(client_id, dek, key_pair.publicKey);
 
 		if (res.error ?? false) {
-			return res;
+			return {
+				error: res,
+				success: false
+			} as ActionData;
 		} else {
-			cookies.set('sessiontoken', res.token, getDefaultCookieOptions());
+			cookies.set('sessiontoken', res.token, Config.defaultCookieSettings);
 
 			return {
 				success: true,
 				private_key: forge.pki.privateKeyToPem(key_pair.privateKey),
 				public_key: Base64.encode(public_key, true),
 				dek: Base64.encode(dek, true)
-			};
+			} as ActionData;
 		}
 	}
 } satisfies Actions;
