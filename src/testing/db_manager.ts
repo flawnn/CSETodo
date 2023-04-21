@@ -13,7 +13,7 @@ class DBManager {
 		this.connection = null;
 	}
 
-	async start() {
+	async start(insertUser?: boolean) {
 		this.server = await MongoMemoryReplSet.create({ replSet: { storageEngine: 'wiredTiger' } });
 		const url = (this.server as MongoMemoryReplSet).getUri('todoApp');
 
@@ -25,10 +25,12 @@ class DBManager {
 			}
 		});
 
-		// Insert new user
-		await this.connection.users?.create({
-			data: { ...testUser }
-		});
+		if (insertUser ?? true) {
+			// Insert new user
+			await this.connection.users?.create({
+				data: { ...testUser }
+			});
+		}
 	}
 
 	stop() {

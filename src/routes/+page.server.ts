@@ -2,9 +2,9 @@ import { Config } from '$root/config';
 import { UserController } from '$root/services/users';
 import { Base64 } from 'js-base64';
 import forge from 'node-forge';
-import type { ActionData, Actions } from './../../.svelte-kit/types/src/routes/$types.d';
+import type { Actions } from './../../.svelte-kit/types/src/routes/$types.d';
 
-export const actions = {
+export const actions: Actions = {
 	/**
 	 *  Generates symmetric and asymmetric key pairs when registering.
 	 *  Returns whether everything was successful as well as the private key to show the user for recovery
@@ -23,7 +23,7 @@ export const actions = {
 			return {
 				error: res,
 				success: false
-			} as ActionData;
+			};
 		} else {
 			cookies.set('sessiontoken', res.token, Config.defaultCookieSettings);
 
@@ -32,7 +32,7 @@ export const actions = {
 				private_key: forge.pki.privateKeyToPem(key_pair.privateKey),
 				public_key: Base64.encode(public_key, true),
 				dek: Base64.encode(dek, true)
-			} as ActionData;
+			};
 		}
 	}
-} satisfies Actions;
+};
