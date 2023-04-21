@@ -1,5 +1,5 @@
 import { JWT_SECRET } from '$env/static/private';
-import { getDefaultCookieOptions } from '$root/lib/util';
+import { Config } from '$root/config';
 import { UserController } from '$root/services/users';
 import type { JwtData } from '$root/types/JwtData';
 import type { users } from '@prisma/client';
@@ -40,7 +40,7 @@ export const POST = (async ({ request, cookies }) => {
 				JWT_SECRET
 			);
 
-			cookies.set('sessiontoken', token, getDefaultCookieOptions());
+			cookies.set('sessiontoken', token, Config.defaultCookieSettings);
 
 			const sanitizedUser: sanitizedUser = user;
 
