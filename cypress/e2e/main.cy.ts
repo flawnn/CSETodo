@@ -1,13 +1,12 @@
 /// <reference types="cypress" />
-
 import 'cypress-wait-until';
-import { getDefaultCookieOptions } from '../../src/lib/util';
+import { Config } from '../../src/config';
 
 describe('Main Page (authenticated)', () => {
 	// Load essential data for E2E testing
 	beforeEach(() => {
-		cy.setCookie('sessiontoken', Cypress.env('sessiontoken'), getDefaultCookieOptions());
-		cy.setCookie('client_id', Cypress.env('client_id'), getDefaultCookieOptions());
+		cy.setCookie('sessiontoken', Cypress.env('sessiontoken'), Config.defaultCookieSettings);
+		cy.setCookie('client_id', Cypress.env('client_id'), Config.defaultCookieSettings);
 		window.localStorage.setItem('public_key', Cypress.env('public_key'));
 		window.localStorage.setItem('dek', Cypress.env('dek'));
 	});
