@@ -1,4 +1,4 @@
-import { UserController } from '$root/services/users';
+import { UserController } from '$root/database/services/users';
 import { error, type RequestHandler } from '@sveltejs/kit';
 
 // Only two methods as we only update/get data over the server

@@ -1,12 +1,8 @@
-import { database as applicationDB } from '$root/database/db';
-import type { PrismaClient } from '@prisma/client';
 import { error, type Handle } from '@sveltejs/kit';
 import { parse } from 'cookie';
 import { v4 as uuidv4 } from 'uuid';
-import { vi, type Mock } from 'vitest';
-import { UserController } from './services/users';
-import { DBManager } from './testing/db_manager';
 import { Config } from './config';
+import { UserController } from './database/services/users';
 
 export const handle: Handle = (async ({ event, resolve }) => {
 	const { headers } = event.request;

@@ -1,5 +1,5 @@
 import { Config } from '$root/config';
-import { UserController } from '$root/services/users';
+import { UserController } from '$root/database/services/users';
 import { Base64 } from 'js-base64';
 import forge from 'node-forge';
 import type { Actions } from './../../.svelte-kit/types/src/routes/$types.d';

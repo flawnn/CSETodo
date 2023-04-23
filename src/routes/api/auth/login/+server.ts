@@ -1,6 +1,6 @@
 import { JWT_SECRET } from '$env/static/private';
 import { Config } from '$root/config';
-import { UserController } from '$root/services/users';
+import { UserController } from '$root/database/services/users';
 import type { JwtData } from '$root/types/JwtData';
 import type { users } from '@prisma/client';
 import { error, type RequestHandler } from '@sveltejs/kit';

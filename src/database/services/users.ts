@@ -6,7 +6,7 @@ import type { PrismaClient, users } from '@prisma/client';
 import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
 import forge from 'node-forge';
-import type { JwtData } from './../types/JwtData';
+import type { JwtData } from '../../types/JwtData';
 export class UserController {
 	private static instance: UserController;
 
