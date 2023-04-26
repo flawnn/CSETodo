@@ -1,8 +1,7 @@
 import { JWT_SECRET } from '$env/static/private';
 import { Config } from '$root/config';
-import { UserController } from '$root/database/services/users';
+import { UserService } from '$root/database/services/users';
 import type { JwtData } from '$root/types/JwtData';
-import type { users } from '@prisma/client';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
@@ -23,10 +22,7 @@ export const POST = (async ({ request, cookies }) => {
 
 		if (verified) {
 			// check if public_key is in db
-			let user: users = await UserController.getInstance().findUser(
-				undefined,
-				body.payload.public_key
-			);
+			let user = await UserService.getInstance().findUser(undefined, body.payload.public_key);
 
 			if (!user) {
 				throw error(500, 'User not found');

@@ -2,13 +2,14 @@ import { JWT_SECRET } from '$env/static/private';
 import { Config } from '$root/config';
 import { database } from '$root/database/db';
 import { encryptTodos } from '$root/lib/encryption/util';
-import type { PrismaClient, users } from '@prisma/client';
+import type { PrismaClient } from '@prisma/client';
 import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
 import forge from 'node-forge';
 import type { JwtData } from '../../types/JwtData';
-export class UserController {
-	private static instance: UserController;
+
+export class UserService {
+	private static instance: UserService;
 
 	private db: PrismaClient;
 
@@ -16,39 +17,37 @@ export class UserController {
 		this.db = database.getDb();
 	}
 
-	public static getInstance(): UserController {
-		if (!UserController.instance) {
-			UserController.instance = new UserController();
+	public static getInstance(): UserService {
+		if (!UserService.instance) {
+			UserService.instance = new UserService();
 		}
 
-		return UserController.instance;
+		return UserService.instance;
 	}
 
 	public async createUser(session_id: string, dek: string, publicKey: forge.pki.rsa.PublicKey) {
-		let public_key_pem = forge.pki.publicKeyToPem(publicKey);
+		const public_key_pem = forge.pki.publicKeyToPem(publicKey);
 
-		let existingUser = await this.db.users.findFirst({
+		const existingUser = await this.db.users.findFirst({
 			where: {
 				public_key: public_key_pem
 			}
 		});
 
 		// Generate encrypted, default set of todos
-		var defaultTodoSet = encryptTodos(dek, Config.defaultTodos);
+		const defaultTodoSet = encryptTodos(dek, Config.defaultTodos);
 
 		if (!existingUser) {
-			var newUser;
+			let newUser;
 			try {
-				type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
-
-				newUser = (await this.db.users.create({
+				newUser = await this.db.users.create({
 					data: {
 						public_key: Base64.encode(public_key_pem),
 						active_sessions: [session_id],
 						dek: Base64.encode(publicKey.encrypt(dek)),
 						todos: defaultTodoSet
 					}
-				})) as Partial<ThenArg<ReturnType<typeof this.db.users.create>>>;
+				});
 			} catch {
 				return {
 					error: 'this.db_error'
@@ -68,7 +67,7 @@ export class UserController {
 		}
 	}
 
-	public async findUser(id: string | undefined, public_key: string | undefined): Promise<users> {
+	public async findUser(id: string | undefined, public_key: string | undefined) {
 		let query: { [k: string]: any } = {};
 
 		if (id != null) {
@@ -83,14 +82,10 @@ export class UserController {
 			where: query
 		});
 
-		if (!user) {
-			throw new Error('User not found');
-		}
-
 		return user;
 	}
 
-	public async getUserByCookies(cookies: Record<string, string>): Promise<JwtData | null> {
+	public async getUserByCookies(cookies: Record<string, string>) {
 		if (cookies['sessiontoken']) {
 			const token = cookies['sessiontoken'];
 
@@ -116,17 +111,17 @@ export class UserController {
 					client_id: jwtUser.client_id as string
 				} satisfies JwtData;
 			} catch (error) {
-				console.error(error);
+				return null;
 			}
 		}
-
-		return null;
 	}
 
-	public async getTodos(id: string): Promise<string> {
+	public async getTodos(id: string) {
 		let dbUser = await this.findUser(id, undefined);
 
-		return dbUser.todos;
+		if (dbUser) {
+			return dbUser!.todos;
+		}
 	}
 
 	public async updateTodos(encrypted_todos: string, id: string): Promise<void> {
@@ -139,7 +134,7 @@ export class UserController {
 					todos: encrypted_todos
 				}
 			});
-		} catch (e) {
+		} catch {
 			throw new Error('User not found');
 		}
 	}
