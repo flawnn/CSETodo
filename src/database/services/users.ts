@@ -1,20 +1,17 @@
-import { container } from './../../lib/di_containter';
 import { JWT_SECRET } from '$env/static/private';
 import { Config } from '$root/config';
 import type { Database } from '$root/database/db';
 import { encryptTodos } from '$root/lib/encryption/util';
+import { TOKENS } from '$root/lib/tokens';
 import { IUserService } from '$root/types/database/IUserService';
+import { injected } from 'brandi';
 import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
 import forge from 'node-forge';
-import type { JwtData } from '../../types/JwtData';
-import { TOKENS } from '$root/lib/tokens';
-import { injected } from 'brandi';
+import type { JwtData } from '../../types/helper/JwtData';
 
 export class UserService extends IUserService {
-	constructor(
-		private database: Database
-	) {
+	constructor(private database: Database) {
 		super();
 		this.db = database.getDb();
 	}
@@ -135,4 +132,3 @@ export class UserService extends IUserService {
 }
 
 injected(UserService, TOKENS.Database);
-

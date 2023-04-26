@@ -3,7 +3,7 @@
  */
 
 import { generateRandomId } from '$root/lib/util';
-import type { Todos } from '$root/types/Todo';
+import type { Todos } from '$root/types/helper/Todo';
 
 function filterTodos(todos: Todos[], filter: any): Todos[] {
 	switch (filter) {

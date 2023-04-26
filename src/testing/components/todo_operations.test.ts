@@ -8,7 +8,7 @@ import {
 	toggleCompleted
 } from '$root/components/utils/todos';
 import { describe, expect, it } from 'vitest';
-import type { Todos } from './../../types/Todo';
+import type { Todos } from '../../types/helper/Todo';
 
 describe('Todo operations', () => {
 	let defaultTodos = [

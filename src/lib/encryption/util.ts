@@ -1,4 +1,4 @@
-import type { Todos } from '$root/types/Todo';
+import type { Todos } from '$root/types/helper/Todo';
 import { Base64 } from 'js-base64';
 import forge from 'node-forge';
 

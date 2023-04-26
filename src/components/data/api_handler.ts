@@ -1,6 +1,5 @@
-
 import { encryptTodos } from '$root/lib/encryption/util';
-import type { Todos } from '$root/types/Todo';
+import type { Todos } from '$root/types/helper/Todo';
 import { toast } from '@zerodevx/svelte-toast';
 import { Base64 } from 'js-base64';
 

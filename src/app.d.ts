@@ -1,4 +1,4 @@
-import { JwtData } from './types/JwtData';
+import { JwtData } from './types/helper/JwtData';
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
