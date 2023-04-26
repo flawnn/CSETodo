@@ -1,9 +1,10 @@
-import { UserService } from '$root/database/services/users';
+import { TOKENS } from '$root/lib/tokens';
 import { error, type RequestHandler } from '@sveltejs/kit';
+import { container } from './../../../lib/di_containter';
 
 // Only two methods as we only update/get data over the server
 export const POST = (async ({ request, locals }) => {
-	let userService = UserService.getInstance();
+	let userService = container.get(TOKENS.UserService);
 	let todos: string = await request.text();
 
 	if (todos.length != 0) {
@@ -21,7 +22,7 @@ export const POST = (async ({ request, locals }) => {
 }) satisfies RequestHandler;
 
 export const GET = (async ({ locals }) => {
-	let todos = await UserService.getInstance().getTodos(locals.user.id);
+	let todos = await container.get(TOKENS.UserService).getTodos(locals.user.id);
 
 	return new Response(todos);
 }) satisfies RequestHandler;

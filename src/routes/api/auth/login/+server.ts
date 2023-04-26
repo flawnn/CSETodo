@@ -1,6 +1,7 @@
 import { JWT_SECRET } from '$env/static/private';
 import { Config } from '$root/config';
-import { UserService } from '$root/database/services/users';
+import { container } from '$root/lib/di_containter';
+import { TOKENS } from '$root/lib/tokens';
 import type { JwtData } from '$root/types/JwtData';
 import { error, type RequestHandler } from '@sveltejs/kit';
 import { Base64 } from 'js-base64';
@@ -22,7 +23,9 @@ export const POST = (async ({ request, cookies }) => {
 
 		if (verified) {
 			// check if public_key is in db
-			let user = await UserService.getInstance().findUser(undefined, body.payload.public_key);
+			let user = await container
+				.get(TOKENS.UserService)
+				.findUser(undefined, body.payload.public_key);
 
 			if (!user) {
 				throw error(500, 'User not found');

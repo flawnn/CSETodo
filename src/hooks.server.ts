@@ -2,12 +2,13 @@ import { error, type Handle } from '@sveltejs/kit';
 import { parse } from 'cookie';
 import { v4 as uuidv4 } from 'uuid';
 import { Config } from './config';
-import { UserService } from './database/services/users';
+import { container } from './lib/di_containter';
+import { TOKENS } from './lib/tokens';
 
 export const handle: Handle = (async ({ event, resolve }) => {
 	const { headers } = event.request;
 	const cookies = parse(headers.get('cookie') ?? '');
-	let jwtUser = await UserService.getInstance().getUserByCookies(cookies);
+	let jwtUser = await container.get(TOKENS.UserService).getUserByCookies(cookies);
 
 	if (
 		jwtUser == null &&

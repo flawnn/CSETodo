@@ -1,28 +1,22 @@
+import { container } from './../../lib/di_containter';
 import { JWT_SECRET } from '$env/static/private';
 import { Config } from '$root/config';
-import { database } from '$root/database/db';
+import type { Database } from '$root/database/db';
 import { encryptTodos } from '$root/lib/encryption/util';
-import type { PrismaClient } from '@prisma/client';
+import { IUserService } from '$root/types/database/IUserService';
 import { Base64 } from 'js-base64';
 import jwt from 'jsonwebtoken';
 import forge from 'node-forge';
 import type { JwtData } from '../../types/JwtData';
+import { TOKENS } from '$root/lib/tokens';
+import { injected } from 'brandi';
 
-export class UserService {
-	private static instance: UserService;
-
-	private db: PrismaClient;
-
-	private constructor() {
+export class UserService extends IUserService {
+	constructor(
+		private database: Database
+	) {
+		super();
 		this.db = database.getDb();
-	}
-
-	public static getInstance(): UserService {
-		if (!UserService.instance) {
-			UserService.instance = new UserService();
-		}
-
-		return UserService.instance;
 	}
 
 	public async createUser(session_id: string, dek: string, publicKey: forge.pki.rsa.PublicKey) {
@@ -139,3 +133,6 @@ export class UserService {
 		}
 	}
 }
+
+injected(UserService, TOKENS.Database);
+
