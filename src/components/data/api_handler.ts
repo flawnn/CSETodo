@@ -5,9 +5,15 @@ import { Base64 } from 'js-base64';
 
 async function pushTasksToDB(initialTodos: Todos[], newTodos: Todos[]) {
 	if (newTodos != initialTodos) {
-		let encrypted = encryptTodos(Base64.decode(localStorage.getItem('dek')!), newTodos);
+		const dek = localStorage.getItem('dek');
 
-		let res = await fetch('/api/tasks', {
+		if (dek == null) {
+			throw Error('Missing DEK');
+		}
+
+		const encrypted = encryptTodos(Base64.decode(localStorage.getItem('dek') as string), newTodos);
+
+		const res = await fetch('/api/tasks', {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',

@@ -5,7 +5,7 @@
 import { generateRandomId } from '$root/lib/util';
 import type { Todos } from '$root/types/helper/Todo';
 
-function filterTodos(todos: Todos[], filter: any): Todos[] {
+function filterTodos(todos: Todos[], filter: unknown): Todos[] {
 	switch (filter) {
 		default:
 			return todos;
@@ -17,7 +17,7 @@ function filterTodos(todos: Todos[], filter: any): Todos[] {
 }
 
 async function addTodo(todos: Todos[], todo: string): Promise<Todos[]> {
-	let newTodo: Todos = {
+	const newTodo: Todos = {
 		id: generateRandomId(),
 		text: todo,
 		completed: false
@@ -27,7 +27,7 @@ async function addTodo(todos: Todos[], todo: string): Promise<Todos[]> {
 }
 
 async function toggleCompleted(todos: Todos[], event: MouseEvent): Promise<Todos[]> {
-	let { checked } = event.target as HTMLInputElement;
+	const { checked } = event.target as HTMLInputElement;
 
 	return todos.map((todo) => ({
 		...todo,
@@ -49,7 +49,7 @@ async function removeTodo(todos: Todos[], id: string): Promise<Todos[]> {
 }
 
 async function editTodo(todos: Todos[], id: string, newTodo: string): Promise<Todos[]> {
-	let currentTodo = todos.findIndex((todo) => todo.id === id);
+	const currentTodo = todos.findIndex((todo) => todo.id === id);
 	todos[currentTodo].text = newTodo;
 	return todos;
 }

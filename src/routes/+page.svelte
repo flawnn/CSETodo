@@ -2,8 +2,8 @@
 	import Todo from '$root/components/Todo.svelte';
 	import { clickOutside } from '$root/lib/click_outside';
 	import { decryptTodos, getPublicKeyFromPrivateKey } from '$root/lib/encryption/util';
-	import type { Todos } from '$root/types/Todo';
-	import type { sanitizedUser } from '$root/types/User';
+	import type { Todos } from '$root/types/helper/Todo';
+	import type { sanitizedUser } from '$root/types/helper/User';
 	import { toast } from '@zerodevx/svelte-toast';
 	import { Base64 } from 'js-base64';
 	import forge from 'node-forge';
@@ -21,15 +21,11 @@
 	onMount(async () => {
 		// Only to be executed after having registered to save relevant data in browser
 		if (form != null) {
-			if (form.error != undefined) {
-				toast.push(form.error!);
-			} else {
-				localStorage.setItem('dek', form.dek!);
-				localStorage.setItem('public_key', form.public_key!);
-				sessionStorage.setItem('private_key', form.private_key!);
+			localStorage.setItem('dek', form.dek!);
+			localStorage.setItem('public_key', form.public_key!);
+			sessionStorage.setItem('private_key', form.private_key!);
 
-				location.href = '/';
-			}
+			location.href = '/';
 		}
 
 		// Show private key on root page reload

@@ -11,19 +11,19 @@ import type { sanitizedUser } from '../../../../types/helper/User';
 
 export const POST = (async ({ request, cookies }) => {
 	try {
-		let body = await request.json();
+		const body = await request.json();
 
-		let publicKey = Base64.decode(body.payload.public_key);
-		let forgePublicKey = forge.pki.publicKeyFromPem(publicKey);
+		const publicKey = Base64.decode(body.payload.public_key);
+		const forgePublicKey = forge.pki.publicKeyFromPem(publicKey);
 
-		var md = forge.md.sha1.create();
+		const md = forge.md.sha1.create();
 		md.update(JSON.stringify(body.payload), 'utf8');
 
-		var verified = forgePublicKey.verify(md.digest().bytes(), body.signature);
+		const verified = forgePublicKey.verify(md.digest().bytes(), body.signature);
 
 		if (verified) {
 			// check if public_key is in db
-			let user = await container
+			const user = await container
 				.get(TOKENS.UserService)
 				.findUser(undefined, body.payload.public_key);
 
@@ -31,7 +31,7 @@ export const POST = (async ({ request, cookies }) => {
 				throw error(500, 'User not found');
 			}
 
-			let token = jwt.sign(
+			const token = jwt.sign(
 				{
 					id: user.id,
 					client_id: body.payload.client_id

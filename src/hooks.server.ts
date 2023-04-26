@@ -8,7 +8,13 @@ import { TOKENS } from './lib/tokens';
 export const handle: Handle = (async ({ event, resolve }) => {
 	const { headers } = event.request;
 	const cookies = parse(headers.get('cookie') ?? '');
-	let jwtUser = await container.get(TOKENS.UserService).getUserByCookies(cookies);
+
+	let jwtUser;
+	try {
+		jwtUser = await container.get(TOKENS.UserService).decodeJwtToken(cookies);
+	} catch (e) {
+		throw error(501, (e as Error).message);
+	}
 
 	if (
 		jwtUser == null &&
@@ -17,7 +23,7 @@ export const handle: Handle = (async ({ event, resolve }) => {
 		throw error(401, 'Unauthorized');
 	}
 
-	event.locals.user = jwtUser!;
+	event.locals.user = jwtUser;
 
 	let uuid = event.cookies.get('client_id');
 	if (uuid == null) {

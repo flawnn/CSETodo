@@ -1,6 +1,6 @@
-<script lang="ts"> 
+<script lang="ts">
 	import '$root/components/styles/Todo.css';
-	import type { FiltersType, Todos } from '$root/types/Todo';
+	import type { FiltersType, Todos } from '$root/types/helper/Todo';
 	import { Base64 } from 'js-base64';
 	import forge from 'node-forge';
 	import { fade } from 'svelte/transition';
@@ -9,11 +9,19 @@
 	import Avatar from './Avatar.svelte';
 	import TodoElement from './TodoElement.svelte';
 	import { pushTasksToDB } from './data/api_handler';
-	import { addTodo, clearCompleted, completeTodo, editTodo, filterTodos, removeTodo, toggleCompleted } from './utils/todos';
+	import {
+		addTodo,
+		clearCompleted,
+		completeTodo,
+		editTodo,
+		filterTodos,
+		removeTodo,
+		toggleCompleted
+	} from './utils/todos';
 
 	// Global Variables
 	let filters = ['all', 'active', 'completed'];
-		
+
 	// Component Props
 	export let initialTodos: Todos[];
 
@@ -76,7 +84,7 @@
 						{/each}
 					</div>
 					<button
-						on:click={() => todos = clearCompleted(todos)}
+						on:click={() => (todos = clearCompleted(todos))}
 						class:hidden={completedTodos === 0}
 						class="clear-completed">Clear completed</button
 					>

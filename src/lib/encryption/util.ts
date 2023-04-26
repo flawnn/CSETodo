@@ -3,15 +3,15 @@ import { Base64 } from 'js-base64';
 import forge from 'node-forge';
 
 function getPublicKeyFromPrivateKey(forgePrivateKey: forge.pki.rsa.PrivateKey): string {
-	var forgePublicKey = forge.pki.setRsaPublicKey(forgePrivateKey.n, forgePrivateKey.e);
+	const forgePublicKey = forge.pki.setRsaPublicKey(forgePrivateKey.n, forgePrivateKey.e);
 
-	var publicKey = forge.pki.publicKeyToPem(forgePublicKey);
+	const publicKey = forge.pki.publicKeyToPem(forgePublicKey);
 
 	return publicKey;
 }
 
 function decryptTodos(dek: string, todos: string): Todos[] {
-	var decipher = forge.cipher.createDecipher('AES-CBC', dek);
+	const decipher = forge.cipher.createDecipher('AES-CBC', dek);
 
 	// TODO: DON'T USE CONSTANT IV
 	decipher.start({ iv: 'GGGGGGGGGGGGGGGG' });
@@ -24,7 +24,7 @@ function decryptTodos(dek: string, todos: string): Todos[] {
 }
 
 function encryptTodos(dek: string, todos: Todos[]): string {
-	var cipher = forge.cipher.createCipher('AES-CBC', dek);
+	const cipher = forge.cipher.createCipher('AES-CBC', dek);
 	cipher.start({ iv: 'GGGGGGGGGGGGGGGG' });
 	cipher.update(forge.util.createBuffer(JSON.stringify(todos)));
 	cipher.finish();

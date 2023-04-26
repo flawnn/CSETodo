@@ -35,6 +35,7 @@ specifiers:
   svelte-check: ^3.0.4
   tailwindcss: ^3.2.7
   tslib: ^2.5.0
+  tslint-clean-code: ^0.2.10
   typescript: ^4.9.5
   uuid: ^9.0.0
   vite: ^4.1.4
@@ -53,6 +54,7 @@ dependencies:
   js-base64: 3.7.5
   jsonwebtoken: 9.0.0
   node-forge: 1.3.1
+  tslint-clean-code: 0.2.10_typescript@4.9.5
   uuid: 9.0.0
 
 devDependencies:
@@ -3119,6 +3121,10 @@ packages:
     hasBin: true
     dev: true
 
+  /memoize-decorator/1.0.2:
+    resolution: {integrity: sha512-G2vHcq4c+EwnBAOeWCH1mNz99QPCgm4ECjhHOd3SFZm66jVlwhBLdqhCvnHxptaRyZfm8ap3igoeDfrO92+uHQ==}
+    dev: false
+
   /memory-pager/1.5.0:
     resolution: {integrity: sha512-ZS4Bp4r/Zoeq6+NLJpP+0Zzm0pR8whtGPf1XExKLJBAczGMnSi3It14OiNCStjQjM6NU1okjQGSxgEZN8eBYKg==}
     dev: true
@@ -4209,11 +4215,30 @@ packages:
 
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-    dev: true
 
   /tslib/2.5.0:
     resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
     dev: true
+
+  /tslint-clean-code/0.2.10_typescript@4.9.5:
+    resolution: {integrity: sha512-MjfU3TVDB+oidhI/uAN/p0ncaqFnPq4L6nYtPvNp/MaFxM52jYtgx1qxf+uTIaQ7KZWZB/P9CpbL7/8WWSzQJg==}
+    peerDependencies:
+      tslint: '>=5.1.0'
+    dependencies:
+      memoize-decorator: 1.0.2
+      tsutils: 2.7.1_typescript@4.9.5
+    transitivePeerDependencies:
+      - typescript
+    dev: false
+
+  /tsutils/2.7.1_typescript@4.9.5:
+    resolution: {integrity: sha512-si/DcDXZX44S3Qpm0r6EzbHFL4QFvykgGXDgWUboMAGXUgIoYh9eRwFp+zoM0TBgR/MCbZFEZpijU+SstlbFaw==}
+    peerDependencies:
+      typescript: '>=2.1.0 || >=2.1.0-dev || >=2.2.0-dev || >=2.3.0-dev || >= 2.4.0-dev || >= 2.5.0-dev || >= 2.6.0-dev'
+    dependencies:
+      tslib: 1.14.1
+      typescript: 4.9.5
+    dev: false
 
   /tsutils/3.21.0_typescript@4.9.5:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
@@ -4261,7 +4286,6 @@ packages:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: true
 
   /ufo/1.1.1:
     resolution: {integrity: sha512-MvlCc4GHrmZdAllBc0iUDowff36Q9Ndw/UzqmEKyrfSzokTd9ZCy1i+IIk5hrYKkjoYVQyNbrw7/F8XJ2rEwTg==}

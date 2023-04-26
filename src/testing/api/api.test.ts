@@ -30,45 +30,46 @@ import { database as applicationDB } from '../../database/db';
 import { createRequestEvent } from '../util';
 
 describe('/api/tasks endpoint', () => {
-	const testDBManager = new DBManager();
-
 	/**
 	 * Setup
 	 */
+	const testDBManager = new DBManager();
+
 	beforeAll(async () => {
-		await testDBManager.start();
 		(applicationDB.getDb as Mock).mockImplementation(
 			() => testDBManager.connection as PrismaClient
 		);
 	});
 
 	afterEach(async () => {
-		(await testDBManager.cleanup()) as any;
+		await testDBManager.cleanup();
 		vi.restoreAllMocks();
 	});
 
-	afterAll(() => testDBManager.stop());
+	afterAll(() => {
+		testDBManager.stop();
+	});
 
 	/**
 	 * Tests
 	 */
 	it('returns encrypted tasks via GET', async () => {
-		let user = (await testDBManager.connection?.users?.findFirst({
+		const user = (await testDBManager.connection?.users?.findFirst({
 			where: {
 				public_key: testUser.public_key
 			}
 		})) as users;
 
-		let res = await GET(createRequestEvent('/api/tasks', 'GET'));
+		const res = await GET(createRequestEvent('/api/tasks', 'GET'));
 
 		assert.isTrue(res.status == 200);
 		assert.equal(await res.text(), user?.todos);
 	});
 
 	it('updates todos via POST', async () => {
-		let res = await POST(createRequestEvent('/api/tasks', 'POST', 'TEST'));
+		const res = await POST(createRequestEvent('/api/tasks', 'POST', 'TEST'));
 
-		let user = (await testDBManager.connection?.users?.findFirst({
+		const user = (await testDBManager.connection?.users?.findFirst({
 			where: {
 				public_key: testUser.public_key
 			}

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import jwt from 'jsonwebtoken';
 import { afterAll, afterEach, describe, expect, it, vi, type Mock } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
@@ -29,13 +31,10 @@ import { DBManager } from '../db_manager';
 import { testCredentials } from '../fixtures/test_credentials';
 
 describe('SvelteKit Register Action', async () => {
-	const testDBManager = new DBManager();
-
 	/**
 	 * Setup
 	 */
-	// Before All
-	await testDBManager.start(false);
+	const testDBManager = new DBManager(false);
 	(applicationDB.getDb as Mock).mockImplementation(() => testDBManager.connection as PrismaClient);
 
 	afterEach(async () => {
@@ -43,14 +42,16 @@ describe('SvelteKit Register Action', async () => {
 		vi.restoreAllMocks();
 	});
 
-	afterAll(() => testDBManager.stop());
+	afterAll(() => {
+		testDBManager.stop();
+	});
 
 	/**
 	 * Tests
 	 */
 	let sessiontoken!: string;
 
-	let res = (await actions.register({
+	const res = await actions.register({
 		cookies: {
 			get: function () {
 				return testCredentials.cookies.client_id;
@@ -59,7 +60,7 @@ describe('SvelteKit Register Action', async () => {
 				sessiontoken = b;
 			}
 		}
-	} as any))!;
+	} as any);
 
 	let user: users;
 	try {
@@ -74,13 +75,13 @@ describe('SvelteKit Register Action', async () => {
 
 	it('returns successfully with matching data in DB', async () => {
 		expect(user).not.toBeNull();
-		expect(res.success).toBeTruthy();
-		expect(user.public_key).toContain(res.public_key);
+		expect(res?.success).toBeTruthy();
+		expect(user.public_key).toContain(res?.public_key);
 	});
 
 	it('returns valid JWT Token', () => {
 		console.log(sessiontoken);
-		let payload: any = jwt.verify(sessiontoken, testConfig.testingJwtSecret);
+		const payload: any = jwt.verify(sessiontoken, testConfig.testingJwtSecret);
 
 		expect(payload.client_id).toBe(testCredentials.cookies.client_id);
 		expect(payload.id).toBe(user.id);

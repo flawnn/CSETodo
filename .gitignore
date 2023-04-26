@@ -9,3 +9,5 @@ node_modules
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 cypress.config.ts
+src/**/*.js
+src/**/*.js.map

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '$root/components/styles/AddTodo.css';
-	import type { Todos } from '$root/types/Todo';
+	import type { Todos } from '$root/types/helper/Todo';
 	import type { AddTodoType, TodosAmountType, ToggleCompletedType } from './types/AddTodo';
 
 	export let all_todos: Todos[];
@@ -18,7 +18,12 @@
 
 <form on:submit|preventDefault={handleSubmit}>
 	{#if todosAmount > 0}
-		<input on:click={async (event) => all_todos = await toggleCompleted(all_todos, event)} type="checkbox" id="toggle-all" class="toggle-all" />
+		<input
+			on:click={async (event) => (all_todos = await toggleCompleted(all_todos, event))}
+			type="checkbox"
+			id="toggle-all"
+			class="toggle-all"
+		/>
 		<label aria-label="Mark all as complete" for="toggle-all"> Mark all as complete </label>
 	{/if}
 	<input

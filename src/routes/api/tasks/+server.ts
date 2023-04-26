@@ -4,8 +4,8 @@ import { container } from './../../../lib/di_containter';
 
 // Only two methods as we only update/get data over the server
 export const POST = (async ({ request, locals }) => {
-	let userService = container.get(TOKENS.UserService);
-	let todos: string = await request.text();
+	const userService = container.get(TOKENS.UserService);
+	const todos: string = await request.text();
 
 	if (todos.length != 0) {
 		try {
@@ -22,7 +22,10 @@ export const POST = (async ({ request, locals }) => {
 }) satisfies RequestHandler;
 
 export const GET = (async ({ locals }) => {
-	let todos = await container.get(TOKENS.UserService).getTodos(locals.user.id);
-
-	return new Response(todos);
+	try {
+		const todos = await container.get(TOKENS.UserService).getTodos(locals.user.id);
+		return new Response(todos);
+	} catch (e) {
+		throw error(500, (e as Error).message);
+	}
 }) satisfies RequestHandler;

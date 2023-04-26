@@ -40,26 +40,22 @@ export class UserService extends IUserService {
 					}
 				});
 			} catch {
-				return {
-					error: 'this.db_error'
-				};
+				throw new Error('this.db_error');
 			}
 
 			const jwtData: JwtData = {
-				id: newUser.id!,
+				id: newUser.id,
 				client_id: session_id
 			};
 
 			return { token: jwt.sign(jwtData, JWT_SECRET) };
 		} else {
-			return {
-				error: 'public_key_used'
-			};
+			throw new Error('public_key_used');
 		}
 	}
 
 	public async findUser(id: string | undefined, public_key: string | undefined) {
-		let query: { [k: string]: any } = {};
+		const query: { [k: string]: unknown } = {};
 
 		if (id != null) {
 			query.id = id;
@@ -76,42 +72,42 @@ export class UserService extends IUserService {
 		return user;
 	}
 
-	public async getUserByCookies(cookies: Record<string, string>) {
+	public async decodeJwtToken(cookies: Record<string, string>) {
 		if (cookies['sessiontoken']) {
 			const token = cookies['sessiontoken'];
 
-			try {
-				const jwtUser = jwt.verify(token, JWT_SECRET);
-				if (typeof jwtUser === 'string') {
-					throw new Error('Something went wrong');
-				}
-
-				const user = await this.db.users.findUnique({
-					where: {
-						id: jwtUser.id
-					}
-				});
-
-				if (!user) {
-					throw new Error('User not found');
-				}
-
-				// -> User session object
-				return {
-					id: user.id,
-					client_id: jwtUser.client_id as string
-				} satisfies JwtData;
-			} catch (error) {
-				return null;
+			const jwtUser = jwt.verify(token, JWT_SECRET);
+			if (typeof jwtUser === 'string') {
+				throw new Error('Something went wrong');
 			}
+
+			const user = await this.db.users.findUnique({
+				where: {
+					id: jwtUser.id
+				}
+			});
+
+			if (!user) {
+				throw new Error('User not found');
+			}
+
+			// -> User session object
+			return {
+				id: user.id,
+				client_id: jwtUser.client_id as string
+			} satisfies JwtData;
+		} else {
+			throw new Error('Missing sessiontoken!');
 		}
 	}
 
 	public async getTodos(id: string) {
-		let dbUser = await this.findUser(id, undefined);
+		const dbUser = await this.findUser(id, undefined);
 
 		if (dbUser) {
-			return dbUser!.todos;
+			return dbUser.todos;
+		} else {
+			throw new Error('User not found');
 		}
 	}
 

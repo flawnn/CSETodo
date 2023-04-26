@@ -5,17 +5,13 @@ import 'cypress-wait-until';
 import { Config } from '../../../config';
 
 describe('Main Page (authenticated)', () => {
-	const testDBManager = new DBManager();
-
 	/**
 	 * Setup
 	 */
-	before(async () => {
-		await testDBManager.start();
-	});
+	const testDBManager = new DBManager();
 
 	afterEach(async () => {
-		(await testDBManager.cleanup()) as any;
+		await testDBManager.cleanup();
 	});
 
 	after(() => testDBManager.stop());
@@ -53,7 +49,7 @@ describe('Main Page (unauthenticated)', () => {
 	});
 
 	afterEach(async () => {
-		(await testDBManager.cleanup()) as any;
+		await testDBManager.cleanup();
 	});
 
 	after(() => testDBManager.stop());

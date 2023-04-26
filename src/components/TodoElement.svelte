@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Todos } from '$root/types/Todo';
+	import type { Todos } from '$root/types/helper/Todo';
 	import { quintOut } from 'svelte/easing';
 	import { slide } from 'svelte/transition';
 	import type { CompleteTodoType, EditTodoType, RemoveTodoType } from './types/TodoElement';
@@ -30,7 +30,7 @@
 		}
 	}
 
-	async function handleBlur(event: FocusEvent, id: string){
+	async function handleBlur(event: FocusEvent, id: string) {
 		let targetElement = event.target as HTMLInputElement;
 		let newTodo = targetElement.value;
 
@@ -44,7 +44,7 @@
 	<div class="todo-item">
 		<div>
 			<input
-				on:change={async () => all_todos = await completeTodo(all_todos, todo.id)}
+				on:change={async () => (all_todos = await completeTodo(all_todos, todo.id))}
 				checked={todo.completed}
 				id="todo"
 				class="toggle"
@@ -52,10 +52,14 @@
 			/>
 			<label aria-label="Check todo" class="todo-check" for="todo" />
 		</div>
-		<span on:dblclick={() => editing = true} class:completed={todo.completed} class="todo-text"
+		<span on:dblclick={() => (editing = true)} class:completed={todo.completed} class="todo-text"
 			>{todo.text}</span
 		>
-		<button aria-label="Remove todo" on:click={async () => all_todos = await removeTodo(all_todos, todo.id)} class="remove" />
+		<button
+			aria-label="Remove todo"
+			on:click={async () => (all_todos = await removeTodo(all_todos, todo.id))}
+			class="remove"
+		/>
 	</div>
 
 	{#if editing}

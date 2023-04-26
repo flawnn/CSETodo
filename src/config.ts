@@ -12,5 +12,5 @@ export const Config = {
 		sameSite: 'strict',
 		secure: false,
 		maxAge: 60 * 60 * 24 * 30 * 120
-	} as Object
+	} as object
 };

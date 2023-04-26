@@ -38,7 +38,7 @@
 			class="rounded-full"
 			alt="avatar"
 		/>
-		
+
 		{#if show}
 			<div
 				in:scale={{ duration: 100, start: 0.95 }}

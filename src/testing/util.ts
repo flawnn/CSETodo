@@ -1,4 +1,4 @@
-import type { RequestEvent } from './../../.svelte-kit/types/src/routes/api/auth/$types.d';
+import type { RequestEvent } from '@sveltejs/kit';
 import { testCredentials } from './fixtures/test_credentials';
 import { testUser } from './fixtures/test_user';
 
@@ -31,5 +31,5 @@ export function createRequestEvent(path: string, method: string, body?: string |
 			body: body
 		}),
 		locals: locals
-	} as any;
+	} as RequestEvent<Partial<Record<string, string>>, string | null>;
 }

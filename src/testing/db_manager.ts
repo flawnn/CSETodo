@@ -5,12 +5,11 @@ import { testUser } from './fixtures/test_user';
 const COLLECTIONS = ['users'];
 
 class DBManager {
-	server: any;
-	connection: Partial<PrismaClient | null>;
+	server?: MongoMemoryReplSet;
+	connection?: PrismaClient;
 
-	constructor() {
-		this.server = null;
-		this.connection = null;
+	constructor(insertUser?: boolean) {
+		this.start(insertUser);
 	}
 
 	async start(insertUser?: boolean) {
@@ -34,16 +33,16 @@ class DBManager {
 	}
 
 	stop() {
-		this.connection?.$disconnect!();
-		return this.server.stop();
+		this.connection?.$disconnect?.();
+		return this.server?.stop();
 	}
 
 	async cleanup() {
 		// Delete all user data from users
-		await Promise.all(COLLECTIONS.map((c) => this.connection?.users?.deleteMany({ where: {} })));
+		await Promise.all(COLLECTIONS.map(() => this.connection?.users?.deleteMany({ where: {} })));
 
 		// Insert new user
-		await this.connection!.users?.create({
+		await this.connection?.users?.create({
 			data: { ...testUser }
 		});
 	}

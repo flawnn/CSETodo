@@ -11,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 import type { Todos } from '../../types/helper/Todo';
 
 describe('Todo operations', () => {
-	let defaultTodos = [
+	const defaultTodos = [
 		{ id: '1', text: 'Todo 1', completed: true },
 		{ id: '2', text: 'Todo 2', completed: false },
 		{ id: '3', text: 'Todo 3', completed: false },
@@ -20,13 +20,13 @@ describe('Todo operations', () => {
 
 	describe('filters', () => {
 		it('completed todos', () => {
-			let result = filterTodos(defaultTodos, 'completed');
+			const result = filterTodos(defaultTodos, 'completed');
 
 			expect(result).toEqual([{ id: '1', text: 'Todo 1', completed: true }]);
 		});
 
 		it('active todo', () => {
-			let result = filterTodos(defaultTodos, 'active');
+			const result = filterTodos(defaultTodos, 'active');
 
 			expect(result).toEqual([
 				{ id: '2', text: 'Todo 2', completed: false },
@@ -37,7 +37,7 @@ describe('Todo operations', () => {
 	});
 
 	it('adds todo', async () => {
-		let result = await addTodo(JSON.parse(JSON.stringify(defaultTodos)), 'Test!');
+		const result = await addTodo(JSON.parse(JSON.stringify(defaultTodos)), 'Test!');
 
 		expect(result[result.length - 1]).toSatisfy(
 			(e: Todos) => e.text == 'Test!' && e.completed == false
@@ -45,7 +45,7 @@ describe('Todo operations', () => {
 	});
 
 	it('check all todos', async () => {
-		let result = await toggleCompleted(JSON.parse(JSON.stringify(defaultTodos)), {
+		const result = await toggleCompleted(JSON.parse(JSON.stringify(defaultTodos)), {
 			target: { checked: true }
 		} as unknown as MouseEvent);
 
@@ -55,18 +55,18 @@ describe('Todo operations', () => {
 	});
 
 	it('toggle complete prop of todo', async () => {
-		let result = await completeTodo(JSON.parse(JSON.stringify(defaultTodos)), defaultTodos[0].id);
+		const result = await completeTodo(JSON.parse(JSON.stringify(defaultTodos)), defaultTodos[0].id);
 
 		expect(result[0].completed).toEqual(false);
 	});
 
 	it('remove todo', async () => {
-		let result = await removeTodo(JSON.parse(JSON.stringify(defaultTodos)), defaultTodos[0].id);
+		const result = await removeTodo(JSON.parse(JSON.stringify(defaultTodos)), defaultTodos[0].id);
 
 		expect(result).toEqual(defaultTodos.filter((x) => x.id != defaultTodos[0].id));
 	});
 	it('edit todo', async () => {
-		let result = await editTodo(
+		const result = await editTodo(
 			JSON.parse(JSON.stringify(defaultTodos)),
 			defaultTodos[0].id,
 			'Test!'
@@ -75,7 +75,7 @@ describe('Todo operations', () => {
 		expect(result[0].text).toEqual('Test!');
 	});
 	it('clear completed todos', () => {
-		let result = clearCompleted(JSON.parse(JSON.stringify(defaultTodos)));
+		const result = clearCompleted(JSON.parse(JSON.stringify(defaultTodos)));
 
 		expect(result).toEqual([
 			{ id: '2', text: 'Todo 2', completed: false },
