@@ -18,7 +18,7 @@ fetchMocker.dontMock();
 
 // Test-related imports (due to need of manual hoisting down here)
 import { TestDatabase } from '$root/database/db';
-import { container } from '$root/lib/di_containter';
+import { container } from '$root/lib/di_container';
 import { TOKENS } from '$root/lib/tokens';
 import { actions } from '$root/routes/+page.server';
 import type { PrismaClient, users } from '@prisma/client';

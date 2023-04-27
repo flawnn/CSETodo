@@ -1,6 +1,6 @@
 import { TOKENS } from '$root/lib/tokens';
 import { error, type RequestHandler } from '@sveltejs/kit';
-import { container } from './../../../lib/di_containter';
+import { container } from '../../../lib/di_container';
 
 // Only two methods as we only update/get data over the server
 export const POST = (async ({ request, locals }) => {

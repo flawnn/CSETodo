@@ -15,7 +15,6 @@
 		"vercel-build": "prisma generate && vite build"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.31.2",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.10.0",
 		"@types/bcryptjs": "^2.4.2",
@@ -24,7 +23,7 @@
 		"@typescript-eslint/parser": "^5.54.0",
 		"@zerodevx/svelte-toast": "^0.9.2",
 		"autoprefixer": "^10.4.13",
-		"cypress": "^12.8.0",
+		"cypress": "^12.11.0",
 		"cypress-wait-until": "^1.7.2",
 		"eslint": "^8.35.0",
 		"eslint-config-prettier": "^8.7.0",

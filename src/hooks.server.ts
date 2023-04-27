@@ -2,7 +2,7 @@ import { error, type Handle } from '@sveltejs/kit';
 import { parse } from 'cookie';
 import { v4 as uuidv4 } from 'uuid';
 import { Config } from './config';
-import { container } from './lib/di_containter';
+import { container } from './lib/di_container';
 import { TOKENS } from './lib/tokens';
 
 export const handle: Handle = (async ({ event, resolve }) => {

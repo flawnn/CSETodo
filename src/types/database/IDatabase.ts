@@ -1,6 +1,6 @@
 import type { PrismaClient } from '@prisma/client';
 
-export abstract class IDatabase {
+export abstract class IDatabaseService {
 	db: PrismaClient;
 
 	constructor() {

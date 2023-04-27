@@ -1,6 +1,6 @@
 import { JWT_SECRET } from '$env/static/private';
 import { Config } from '$root/config';
-import { container } from '$root/lib/di_containter';
+import { container } from '$root/lib/di_container';
 import { TOKENS } from '$root/lib/tokens';
 import type { JwtData } from '$root/types/helper/JwtData';
 import { error, type RequestHandler } from '@sveltejs/kit';

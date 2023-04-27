@@ -1,8 +1,8 @@
 import { JWT_SECRET } from '$env/static/private';
 import { Config } from '$root/config';
-import type { Database } from '$root/database/db';
 import { encryptTodos } from '$root/lib/encryption/util';
 import { TOKENS } from '$root/lib/tokens';
+import type { IDatabaseService } from '$root/types/database/IDatabase';
 import { IUserService } from '$root/types/database/IUserService';
 import { injected } from 'brandi';
 import { Base64 } from 'js-base64';
@@ -11,7 +11,7 @@ import forge from 'node-forge';
 import type { JwtData } from '../../types/helper/JwtData';
 
 export class UserService extends IUserService {
-	constructor(database: Database) {
+	constructor(database: IDatabaseService) {
 		super(database);
 	}
 
