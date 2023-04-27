@@ -7,9 +7,11 @@ Authentication runs over RSA, specifically being in knowledge of the respective 
 
 A live demo can be found [here](https://cse-todo.vercel.app) (hosted on Vercel).
 
-### Application Architecture
+## Application Architecture
 
-The rough application architecture can be seen on [this](https://drive.google.com/file/d/1PMfS435HpT5ICBRcgiRqN9r_kv8vFhAE/view?usp=sharing) collection of diagrams (or on the below image).
+The rough application architecture can be seen below or in [this](https://drive.google.com/file/d/1PMfS435HpT5ICBRcgiRqN9r_kv8vFhAE/view?usp=sharing) collection of diagrams. 
+
+**_If you are interested into how the encryption works behind the scenes, check out [this article](https://medium.com/@flawn/securing-your-todo-list-client-side-encryption-in-a-todo-app-a3b22d2882fe) I wrote on Client-Side Encryption!_**
 
 ![image](./docs/diagrams.png)
 
