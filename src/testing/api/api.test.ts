@@ -1,22 +1,6 @@
-import type { PrismaClient, users } from '@prisma/client';
-import { afterAll, afterEach, assert, beforeAll, describe, it, vi, type Mock } from 'vitest';
+import { afterAll, afterEach, assert, describe, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
-import { DBManager } from '../db_manager';
 import { testConfig } from '../fixtures/test_config';
-import { testUser } from '../fixtures/test_user';
-
-// MOCKS
-const fetchMocker = createFetchMock(vi);
-fetchMocker.enableMocks();
-fetchMocker.dontMock();
-
-vi.mock('../../database/db', () => {
-	return {
-		database: {
-			getDb: vi.fn()
-		}
-	};
-});
 
 vi.mock('$env/static/private', () => {
 	return {
@@ -24,22 +8,32 @@ vi.mock('$env/static/private', () => {
 	};
 });
 
+// MOCKS
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+fetchMocker.dontMock();
+
 // Test-related imports (due to need of manual hoisting down here)
+import { TestDatabase } from '$root/database/db';
+import { container } from '$root/lib/di_containter';
+import { TOKENS } from '$root/lib/tokens';
 import { GET, POST } from '$root/routes/api/tasks/+server';
-import { database as applicationDB } from '../../database/db';
+import type { PrismaClient, users } from '@prisma/client';
+import { DBManager } from '../db_manager';
+import { testUser } from '../fixtures/test_user';
 import { createRequestEvent } from '../util';
 
-describe('/api/tasks endpoint', () => {
+describe('/api/tasks endpoint', async () => {
 	/**
 	 * Setup
 	 */
 	const testDBManager = new DBManager();
-
-	beforeAll(async () => {
-		(applicationDB.getDb as Mock).mockImplementation(
-			() => testDBManager.connection as PrismaClient
-		);
-	});
+	await testDBManager.start();
+	const testDBMock = new TestDatabase(testDBManager.connection as PrismaClient);
+	container
+		.bind(TOKENS.Database)
+		.toInstance(() => testDBMock)
+		.inSingletonScope();
 
 	afterEach(async () => {
 		await testDBManager.cleanup();

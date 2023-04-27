@@ -6,8 +6,10 @@ import { Database } from '$root/database/db';
 import { UserService } from '$root/database/services/users';
 import { TOKENS } from './tokens';
 
-export const container = new Container();
+const container = new Container();
 
 container.bind(TOKENS.UserService).toInstance(UserService).inSingletonScope();
 
 container.bind(TOKENS.Database).toInstance(Database).inSingletonScope();
+
+export { container };

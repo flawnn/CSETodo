@@ -1,4 +1,4 @@
-import { database } from '$root/database/db';
+import type { Database } from '$root/database/db';
 import type { PrismaClient } from '@prisma/client';
 import type forge from 'node-forge';
 import type { JwtData } from '../helper/JwtData';
@@ -6,7 +6,7 @@ import type { JwtData } from '../helper/JwtData';
 export abstract class IUserService {
 	protected db: PrismaClient;
 
-	constructor() {
+	constructor(private database: Database) {
 		this.db = database.getDb();
 	}
 

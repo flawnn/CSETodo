@@ -11,9 +11,8 @@ import forge from 'node-forge';
 import type { JwtData } from '../../types/helper/JwtData';
 
 export class UserService extends IUserService {
-	constructor(private database: Database) {
-		super();
-		this.db = database.getDb();
+	constructor(database: Database) {
+		super(database);
 	}
 
 	public async createUser(session_id: string, dek: string, publicKey: forge.pki.rsa.PublicKey) {

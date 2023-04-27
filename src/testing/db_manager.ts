@@ -8,10 +8,6 @@ class DBManager {
 	server?: MongoMemoryReplSet;
 	connection?: PrismaClient;
 
-	constructor(insertUser?: boolean) {
-		this.start(insertUser);
-	}
-
 	async start(insertUser?: boolean) {
 		this.server = await MongoMemoryReplSet.create({ replSet: { storageEngine: 'wiredTiger' } });
 		const url = (this.server as MongoMemoryReplSet).getUri('todoApp');

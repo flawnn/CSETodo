@@ -1,32 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import jwt from 'jsonwebtoken';
-import { afterAll, afterEach, describe, expect, it, vi, type Mock } from 'vitest';
+
+import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
 import createFetchMock from 'vitest-fetch-mock';
 import { testConfig } from '../fixtures/test_config';
 
 // MOCKS
-const fetchMocker = createFetchMock(vi);
-fetchMocker.enableMocks();
-fetchMocker.dontMock();
-
-vi.mock('../../database/db', () => {
-	return {
-		database: {
-			getDb: vi.fn()
-		}
-	};
-});
-
 vi.mock('$env/static/private', () => {
 	return {
 		JWT_SECRET: testConfig.testingJwtSecret
 	};
 });
 
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
+fetchMocker.dontMock();
+
+// Test-related imports (due to need of manual hoisting down here)
+import { TestDatabase } from '$root/database/db';
+import { container } from '$root/lib/di_containter';
+import { TOKENS } from '$root/lib/tokens';
 import { actions } from '$root/routes/+page.server';
 import type { PrismaClient, users } from '@prisma/client';
-import { database as applicationDB } from '../../database/db';
+import jwt from 'jsonwebtoken';
 import { DBManager } from '../db_manager';
 import { testCredentials } from '../fixtures/test_credentials';
 
@@ -34,8 +30,14 @@ describe('SvelteKit Register Action', async () => {
 	/**
 	 * Setup
 	 */
-	const testDBManager = new DBManager(false);
-	(applicationDB.getDb as Mock).mockImplementation(() => testDBManager.connection as PrismaClient);
+	const testDBManager = new DBManager();
+	await testDBManager.start(false);
+	const testDBMock = new TestDatabase(testDBManager.connection as PrismaClient);
+
+	container
+		.bind(TOKENS.Database)
+		.toInstance(() => testDBMock)
+		.inSingletonScope();
 
 	afterEach(async () => {
 		// (await testDBManager.cleanup()) as any;
@@ -80,7 +82,6 @@ describe('SvelteKit Register Action', async () => {
 	});
 
 	it('returns valid JWT Token', () => {
-		console.log(sessiontoken);
 		const payload: any = jwt.verify(sessiontoken, testConfig.testingJwtSecret);
 
 		expect(payload.client_id).toBe(testCredentials.cookies.client_id);
