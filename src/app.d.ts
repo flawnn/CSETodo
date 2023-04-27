@@ -5,7 +5,7 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user: JwtData;
+			user: JwtData | null;
 		}
 		interface PageData {
 			user: JwtData | undefined;

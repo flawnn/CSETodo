@@ -13,7 +13,11 @@ export const handle: Handle = (async ({ event, resolve }) => {
 	try {
 		jwtUser = await container.get(TOKENS.UserService).decodeJwtToken(cookies);
 	} catch (e) {
-		throw error(501, (e as Error).message);
+		if (e.message == 'missing_sessiontoken') {
+			jwtUser = null;
+		} else {
+			throw error(501, e.message);
+		}
 	}
 
 	if (

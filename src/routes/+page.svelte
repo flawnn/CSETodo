@@ -99,7 +99,7 @@
 				location.reload();
 			}
 		} catch (e) {
-			toast.push(e as string);
+			toast.push(e);
 		}
 	}
 </script>

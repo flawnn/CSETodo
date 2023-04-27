@@ -37,7 +37,7 @@ export const actions: Actions = {
 				dek: Base64.encode(dek, true)
 			};
 		} catch (e) {
-			throw error(501, (e as Error).message);
+			throw error(501, e.message);
 		}
 	}
 };

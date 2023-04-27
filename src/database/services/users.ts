@@ -96,7 +96,7 @@ export class UserService extends IUserService {
 				client_id: jwtUser.client_id as string
 			} satisfies JwtData;
 		} else {
-			throw new Error('Missing sessiontoken!');
+			throw new Error('missing_sessiontoken');
 		}
 	}
 

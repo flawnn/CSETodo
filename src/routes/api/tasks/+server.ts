@@ -12,7 +12,7 @@ export const POST = (async ({ request, locals }) => {
 			await userService.updateTodos(todos, locals.user.id);
 		} catch (e) {
 			// Might be a unsafe practice but for debugging purposes
-			throw error(500, e as string);
+			throw error(500, e);
 		}
 	} else {
 		throw error(400, 'Empty body');
@@ -26,6 +26,6 @@ export const GET = (async ({ locals }) => {
 		const todos = await container.get(TOKENS.UserService).getTodos(locals.user.id);
 		return new Response(todos);
 	} catch (e) {
-		throw error(500, (e as Error).message);
+		throw error(500, (e).message);
 	}
 }) satisfies RequestHandler;

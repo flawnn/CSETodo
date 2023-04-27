@@ -1,7 +1,6 @@
 import type { DatabaseService } from '$root/database/db';
 import type { PrismaClient } from '@prisma/client';
 import type forge from 'node-forge';
-import type { JwtData } from '../helper/JwtData';
 
 export abstract class IUserService {
 	protected db: PrismaClient;
@@ -23,7 +22,7 @@ export abstract class IUserService {
 		public_key: string | undefined
 	): Promise<unknown>;
 
-	public abstract decodeJwtToken(cookies: Record<string, string>): Promise<JwtData>;
+	public abstract decodeJwtToken(cookies: Record<string, string>): Promise<any>;
 
 	public abstract getTodos(id: string): Promise<string>;
 
