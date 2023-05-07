@@ -11,6 +11,7 @@
 		"noEmit": true,
 		"sourceMap": true,
 		"baseUrl": ".",
+		"types": ["vitest/globals", "@testing-library/jest-dom"],
 		"paths": {
 			"$root/*": ["./src/*"],
 			"$lib": ["./src/lib"],

@@ -8,5 +8,9 @@ export default defineConfig({
 		alias: {
 			$root: path.resolve('./src')
 		}
+	},
+	test: {
+		globals: true,
+		environment: 'jsdom'
 	}
 });
