@@ -2,25 +2,13 @@
 	import '$root/components/styles/Avatar.css';
 	import { clickOutside } from '$root/lib/click_outside';
 	import { scale } from 'svelte/transition';
+	import { ops } from './utils/user_ops';
 
 	export let client_id: string | undefined;
 
 	export let public_key: string;
 
 	let show = false;
-
-	function logout() {
-		localStorage.clear();
-
-		// Clearing cookies
-		document.cookie.split(';').forEach(function (c) {
-			document.cookie = c
-				.replace(/^ +/, '')
-				.replace(/=.*/, '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;');
-		});
-
-		location.reload();
-	}
 </script>
 
 <div class="fixed top-0 right-0 avatar">
@@ -66,7 +54,8 @@
 					<li>
 						<a
 							href="#"
-							on:click={logout}
+							on:click={ops.logout}
+							aria-label="Logout User"
 							class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
 							>Logout</a
 						>
