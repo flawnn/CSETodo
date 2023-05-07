@@ -21,17 +21,6 @@ describe('AddTodo Component', () => {
 		vi.restoreAllMocks();
 	});
 
-	// it('should show number of all todos', async () => {
-	// 	render(AddTodo, {
-	// 		all_todos: ComponentFixtures.todos,
-	// 		addTodo: addTodo,
-	// 		toggleCompleted: toggleCompleted,
-	// 		todosAmount: ComponentFixtures.todosAmount
-	// 	});
-
-	// 	expect(await screen.findByText(ComponentFixtures.todosAmount)).toBeInTheDocument();
-	// });
-
 	it('should toggle all todos', async () => {
 		const comp = render(AddTodo, {
 			all_todos: ComponentFixtures.todos,

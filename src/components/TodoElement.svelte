@@ -52,8 +52,11 @@
 			/>
 			<label aria-label="Check todo" class="todo-check" for="todo" />
 		</div>
-		<span on:dblclick={() => (editing = true)} class:completed={todo.completed} class="todo-text"
-			>{todo.text}</span
+		<span
+			on:dblclick={() => (editing = true)}
+			class:completed={todo.completed}
+			class="todo-text"
+			aria-label="Edit Todo">{todo.text}</span
 		>
 		<button
 			aria-label="Remove todo"
@@ -67,6 +70,7 @@
 			on:keydown={(event) => handleEdit(event, todo.id)}
 			on:blur={(event) => handleBlur(event, todo.id)}
 			class="edit"
+			id="todo-edit"
 			type="text"
 			value={todo.text}
 		/>
