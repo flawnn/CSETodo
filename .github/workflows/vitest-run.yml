@@ -11,7 +11,7 @@ jobs:
       - name: PNPM Setup
         uses: pnpm/action-setup@v2
         with:
-          version: 6.32.9
+          version: 8.4.0
       - name: Get Deps
         uses: actions/setup-node@v3
         with:
