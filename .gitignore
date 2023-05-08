@@ -11,3 +11,4 @@ vite.config.ts.timestamp-*
 cypress.config.ts
 src/**/*.js
 src/**/*.js.map
+coverage/

@@ -1,20 +1,16 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { fireEvent, queryByAttribute, render } from '@testing-library/svelte';
 import { describe } from 'vitest';
-import TodoElement from '../../components/TodoElement.svelte';
 import { ComponentFixtures } from '../fixtures/components/fixtures';
 
 const getById = queryByAttribute.bind(null, 'id');
 
-const removeTodoMock = vi.fn();
-const editTodoMock = vi.fn();
-const completeTodoMock = vi.fn();
-
 vi.mock('../../components/utils/todos', () => {
-	return { removeTodo: removeTodoMock, editTodo: editTodoMock, completeTodo: completeTodoMock };
+	return { removeTodo: vi.fn(), editTodo: vi.fn(), completeTodo: vi.fn() };
 });
 
 import * as g from '$root/components/utils/todos';
+import TodoElement from '../../components/TodoElement.svelte';
 const { removeTodo, editTodo, completeTodo } = g;
 
 describe('TodoElement Component', () => {
@@ -36,7 +32,7 @@ describe('TodoElement Component', () => {
 
 		await fireEvent.click(completeCheckBox!);
 
-		expect(completeTodoMock).toHaveBeenCalled();
+		expect(completeTodo).toHaveBeenCalled();
 	});
 
 	it('edits the todo', async () => {
@@ -58,7 +54,7 @@ describe('TodoElement Component', () => {
 
 		await fireEvent.keyDown(editTodoForm!, { key: 'Enter', value: 'gg', target: {} });
 
-		expect(editTodoMock).toHaveBeenCalled();
+		expect(editTodo).toHaveBeenCalled();
 	});
 
 	it('removes the todo', async () => {
@@ -76,6 +72,6 @@ describe('TodoElement Component', () => {
 
 		fireEvent.click(removeTodoButton!);
 
-		expect(removeTodoMock).toHaveBeenCalled();
+		expect(removeTodo).toHaveBeenCalled();
 	});
 });

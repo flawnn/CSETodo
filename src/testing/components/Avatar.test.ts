@@ -4,16 +4,15 @@ import { describe } from 'vitest';
 
 const getById = queryByAttribute.bind(null, 'id');
 
-const logoutMock = vi.fn();
-
 vi.mock('../../components/utils/user_ops', () => {
 	return {
 		ops: {
-			logout: logoutMock
+			logout: vi.fn()
 		}
 	};
 });
 
+import { ops } from '$root/components/utils/user_ops';
 import AvatarElement from '../../components/Avatar.svelte';
 
 describe('Avatar Component', () => {
@@ -37,6 +36,6 @@ describe('Avatar Component', () => {
 
 		await fireEvent.click(logoutButton!);
 
-		expect(logoutMock).toHaveBeenCalled();
+		expect(ops.logout).toHaveBeenCalled();
 	});
 });

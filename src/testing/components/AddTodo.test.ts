@@ -1,19 +1,15 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+vi.mock('../../components/utils/todos', () => {
+	return { addTodo: vi.fn(), toggleCompleted: vi.fn() };
+});
+
 import { fireEvent, queryByAttribute, render } from '@testing-library/svelte';
 import { describe } from 'vitest';
-import AddTodo from '../../components/AddTodo.svelte';
 import { ComponentFixtures } from '../fixtures/components/fixtures';
 
 const getById = queryByAttribute.bind(null, 'id');
 
-const addTodoMock = vi.fn();
-const toggleCompletedMock = vi.fn();
-
-vi.mock('../../components/utils/todos', () => {
-	return { addTodo: addTodoMock, toggleCompleted: toggleCompletedMock };
-});
-
 import * as g from '$root/components/utils/todos';
+import AddTodo from '../../components/AddTodo.svelte';
 const { addTodo, toggleCompleted } = g;
 
 describe('AddTodo Component', () => {
@@ -34,7 +30,7 @@ describe('AddTodo Component', () => {
 
 		await fireEvent.click(toggleAllForm!);
 
-		expect(toggleCompletedMock).toHaveBeenCalled();
+		expect(toggleCompleted).toHaveBeenCalled();
 	});
 
 	it('should add new todo with correct content', async () => {
@@ -50,6 +46,6 @@ describe('AddTodo Component', () => {
 
 		fireEvent.submit(addTodoForm!);
 
-		expect(addTodoMock).toHaveBeenCalled();
+		expect(addTodo).toHaveBeenCalled();
 	});
 });
