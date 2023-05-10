@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import * as g from '$root/components/utils/todos';
 import { fireEvent, queryByAttribute, render } from '@testing-library/svelte';
 import { describe } from 'vitest';
+import TodoElement from '../../components/TodoElement.svelte';
 import { ComponentFixtures } from '../fixtures/components/fixtures';
+
+const { removeTodo, editTodo, completeTodo } = g;
 
 const getById = queryByAttribute.bind(null, 'id');
 
 vi.mock('../../components/utils/todos', () => {
 	return { removeTodo: vi.fn(), editTodo: vi.fn(), completeTodo: vi.fn() };
 });
-
-import * as g from '$root/components/utils/todos';
-import TodoElement from '../../components/TodoElement.svelte';
-const { removeTodo, editTodo, completeTodo } = g;
 
 describe('TodoElement Component', () => {
 	afterEach(async () => {

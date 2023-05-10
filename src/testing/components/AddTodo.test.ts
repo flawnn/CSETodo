@@ -1,15 +1,16 @@
+import { fireEvent, queryByAttribute, render } from '@testing-library/svelte';
+import { describe } from 'vitest';
+import { ComponentFixtures } from '../fixtures/components/fixtures';
+import * as g from '$root/components/utils/todos';
+import AddTodo from '../../components/AddTodo.svelte';
+
+
+const getById = queryByAttribute.bind(null, 'id');
+
 vi.mock('../../components/utils/todos', () => {
 	return { addTodo: vi.fn(), toggleCompleted: vi.fn() };
 });
 
-import { fireEvent, queryByAttribute, render } from '@testing-library/svelte';
-import { describe } from 'vitest';
-import { ComponentFixtures } from '../fixtures/components/fixtures';
-
-const getById = queryByAttribute.bind(null, 'id');
-
-import * as g from '$root/components/utils/todos';
-import AddTodo from '../../components/AddTodo.svelte';
 const { addTodo, toggleCompleted } = g;
 
 describe('AddTodo Component', () => {

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { ops } from '$root/components/utils/user_ops';
 import { fireEvent, queryByAttribute, render } from '@testing-library/svelte';
 import { describe } from 'vitest';
+import AvatarElement from '../../components/Avatar.svelte';
 
 const getById = queryByAttribute.bind(null, 'id');
 
@@ -11,9 +13,6 @@ vi.mock('../../components/utils/user_ops', () => {
 		}
 	};
 });
-
-import { ops } from '$root/components/utils/user_ops';
-import AvatarElement from '../../components/Avatar.svelte';
 
 describe('Avatar Component', () => {
 	afterEach(async () => {
