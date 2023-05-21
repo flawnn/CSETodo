@@ -4,4 +4,10 @@ export type Todos = {
 	completed: boolean;
 };
 
-export type FiltersType = 'all' | 'active' | 'completed';
+export enum FiltersType {
+	all,
+	active,
+	completed
+}
+
+export const FiltersTypeKeys = Object.keys(FiltersType).map((el) => el as keyof typeof FiltersType);

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '$root/components/styles/Todo.css';
-	import type { FiltersType, Todos } from '$root/types/helper/Todo';
+	import { FiltersType, FiltersTypeKeys, type Todos } from '$root/types/helper/Todo';
 	import { Base64 } from 'js-base64';
 	import forge from 'node-forge';
 	import { fade } from 'svelte/transition';
@@ -19,19 +19,16 @@
 		toggleCompleted
 	} from './utils/todos';
 
-	// Global Variables
-	let filters = ['all', 'active', 'completed'];
-
 	// Component Props
 	export let initialTodos: Todos[];
 
 	export let data: PageData;
 
 	// Component State
-	let selectedFilter: FiltersType = 'all';
-	let todos = initialTodos.map((a) => {
-		return { ...a };
-	});
+	let selectedFilter: keyof typeof FiltersType = 'all';
+
+	let todos = initialTodos;
+
 	let public_key = forge.pki
 		.publicKeyFromPem(Base64.decode(localStorage.getItem('public_key') as string))
 		.n.toString(16);
@@ -42,10 +39,6 @@
 	$: filteredTodos = filterTodos(todos, selectedFilter);
 	$: completedTodos = todos.filter((todo) => todo.completed).length;
 	$: pushTasksToDB(initialTodos, todos);
-
-	function setFilter(newFilter: any): void {
-		selectedFilter = newFilter;
-	}
 </script>
 
 <main in:fade={{ duration: 1000 }}>
@@ -73,9 +66,9 @@
 						{incompleteTodos === 1 ? 'item' : 'items'} left</span
 					>
 					<div class="filters">
-						{#each filters as filter}
+						{#each FiltersTypeKeys as filter}
 							<button
-								on:click={() => setFilter(filter)}
+								on:click={() => (selectedFilter = filter)}
 								class:selected={selectedFilter === filter}
 								class="filter"
 							>

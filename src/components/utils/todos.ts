@@ -58,6 +58,7 @@ function clearCompleted(todos: Todos[]): Todos[] {
 	return todos.filter((todo) => todo.completed !== true);
 }
 
+
 export {
 	addTodo,
 	clearCompleted,
